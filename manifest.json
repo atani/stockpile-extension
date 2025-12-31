@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Stockpile - Download Organizer",
+  "version": "1.0.0",
+  "description": "Automatically organize downloaded assets from audiio, motionelements and more",
+  "permissions": [
+    "downloads",
+    "storage",
+    "activeTab",
+    "alarms"
+  ],
+  "host_permissions": [
+    "*://*.motionelements.com/*",
+    "*://*.audiio.com/*",
+    "*://*.amazonaws.com/*",
+    "*://*.cloudfront.net/*",
+    "*://*.telnyxcloudstorage.com/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.motionelements.com/*"],
+      "js": ["content/motionelements.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.audiio.com/*"],
+      "js": ["content/audiio.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "options_page": "options/options.html"
+}
