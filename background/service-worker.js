@@ -45,7 +45,7 @@ async function handleRegisterDownload(data, tab) {
 /**
  * Determine the target folder for a download
  */
-async function determineFolder(downloadItem, metadata) {
+async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
   const settings = await getSettings();
 
   if (!settings.enabled) {
@@ -58,16 +58,31 @@ async function determineFolder(downloadItem, metadata) {
   let siteName = metadata?.site || 'Unknown';
   let category = metadata?.category || 'Other';
 
-  // If no metadata, try to determine from URL
+  // If no metadata, try to determine from URL, referrer, activeTabUrl, or filename
   if (!metadata) {
     const url = downloadItem.url || downloadItem.finalUrl || '';
+    const referrer = downloadItem.referrer || '';
+    const filename = downloadItem.filename || '';
+    const lowerFilename = filename.toLowerCase();
+    // Combine referrer and activeTabUrl for path detection
+    const pageUrl = activeTabUrl || referrer || '';
 
-    if (url.includes('motionelements.com') || url.includes('motionelements')) {
+    if (url.includes('motionelements.com') || url.includes('motionelements') ||
+        referrer.includes('motionelements') || lowerFilename.startsWith('motionelements_')) {
       siteName = 'MotionElements';
-      category = getCategoryFromExtension(downloadItem.filename);
-    } else if (url.includes('audiio.com') || url.includes('audiio')) {
+      category = getCategoryFromExtension(filename);
+    } else if (url.includes('audiio.com') || url.includes('audiio') ||
+               referrer.includes('audiio') || pageUrl.includes('audiio') ||
+               lowerFilename.startsWith('audiio_')) {
       siteName = 'Audiio';
-      category = getCategoryFromExtension(downloadItem.filename);
+      // Check pageUrl (activeTabUrl or referrer) for SFX page
+      if (pageUrl.includes('/sfx') || pageUrl.includes('/sound-effects')) {
+        category = 'SE';
+      } else {
+        // Audiio is primarily a music service, default to BGM
+        const extCategory = getCategoryFromExtension(filename);
+        category = (extCategory === 'Other') ? 'BGM' : extCategory;
+      }
     }
   }
 
@@ -154,15 +169,33 @@ function getCategoryFromExtension(filename) {
 }
 
 /**
- * Check if URL is from a target site
+ * Check if URL, referrer, or filename is from a target site
  */
-function isTargetSite(url) {
-  if (!url) return false;
+function isTargetSite(url, referrer, filename) {
   const targetDomains = [
     'motionelements',
     'audiio'
   ];
-  return targetDomains.some(domain => url.toLowerCase().includes(domain));
+
+  // Check URL
+  if (url && targetDomains.some(domain => url.toLowerCase().includes(domain))) {
+    return true;
+  }
+
+  // Check referrer
+  if (referrer && targetDomains.some(domain => referrer.toLowerCase().includes(domain))) {
+    return true;
+  }
+
+  // Check filename prefix (e.g., "Audiio_Bamboo_...")
+  if (filename) {
+    const lowerFilename = filename.toLowerCase();
+    if (targetDomains.some(domain => lowerFilename.startsWith(domain + '_'))) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 // Listen for filename determination - suggest the correct path
@@ -179,7 +212,7 @@ chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => {
       }
 
       // Check if from target site
-      const fromTargetSite = isTargetSite(url) || isTargetSite(downloadItem.referrer);
+      const fromTargetSite = isTargetSite(url, downloadItem.referrer, downloadItem.filename);
 
       if (!fromTargetSite) {
         console.log('[Stockpile] Not a target site, using default:', url);
@@ -189,8 +222,25 @@ chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => {
       // Get metadata
       const metadata = await consumePendingDownload(url);
 
-      // Determine target folder
-      const folder = await determineFolder(downloadItem, metadata);
+      // Get active tab URL for better category detection
+      let activeTabUrl = null;
+      try {
+        const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        activeTabUrl = activeTab?.url || null;
+      } catch (e) {
+        console.log('[Stockpile] Could not get active tab:', e);
+      }
+
+      console.log('[Stockpile] Download item:', {
+        url: url,
+        referrer: downloadItem.referrer,
+        activeTabUrl: activeTabUrl,
+        filename: downloadItem.filename,
+        metadata: metadata
+      });
+
+      // Determine target folder (pass activeTabUrl for better detection)
+      const folder = await determineFolder(downloadItem, metadata, activeTabUrl);
 
       if (folder) {
         const originalFilename = downloadItem.filename;
