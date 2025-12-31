@@ -2,6 +2,12 @@
 
 MotionElements や Audiio などのストックサイトからダウンロードしたアセットを自動的に整理する Chrome 拡張機能です。
 
+## スクリーンショット
+
+![Stockpile ポップアップ](screenshots/screenshot-1-promo.png)
+
+![フォルダ構造](screenshots/screenshot-2-folders.png)
+
 ## 機能
 
 - **自動フォルダ振り分け**: ダウンロードしたファイルをサイト・カテゴリ別に自動で整理
