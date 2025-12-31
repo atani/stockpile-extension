@@ -1,5 +1,38 @@
 // Popup script for Stockpile extension
 
+/**
+ * Apply i18n translations to elements with data-i18n attributes
+ */
+function applyI18n() {
+  // Text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const message = chrome.i18n.getMessage(key);
+    if (message) el.textContent = message;
+  });
+
+  // Placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const message = chrome.i18n.getMessage(key);
+    if (message) el.placeholder = message;
+  });
+
+  // Titles
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    const message = chrome.i18n.getMessage(key);
+    if (message) el.title = message;
+  });
+}
+
+/**
+ * Get i18n message
+ */
+function i18n(key) {
+  return chrome.i18n.getMessage(key) || key;
+}
+
 // Import from lib (need to use dynamic import for popup)
 const DB_KEY = 'downloadHistory';
 const SETTINGS_KEY = 'settings';
@@ -92,7 +125,7 @@ function populateFilters() {
   const sites = getUniqueValues(allRecords, 'site');
 
   // Category filter
-  categoryFilter.innerHTML = '<option value="">All Categories</option>';
+  categoryFilter.innerHTML = `<option value="">${i18n('allCategories')}</option>`;
   categories.forEach(cat => {
     const option = document.createElement('option');
     option.value = cat;
@@ -101,7 +134,7 @@ function populateFilters() {
   });
 
   // Site filter
-  siteFilter.innerHTML = '<option value="">All Sites</option>';
+  siteFilter.innerHTML = `<option value="">${i18n('allSites')}</option>`;
   sites.forEach(site => {
     const option = document.createElement('option');
     option.value = site;
@@ -148,7 +181,7 @@ function renderDownloads(records) {
   totalCount.textContent = records.length;
 
   if (records.length === 0) {
-    downloadList.innerHTML = '<div class="empty-state">No downloads found</div>';
+    downloadList.innerHTML = `<div class="empty-state">${i18n('noDownloads')}</div>`;
     return;
   }
 
@@ -236,6 +269,7 @@ async function refresh() {
 // Event Listeners
 enableToggle.addEventListener('change', () => {
   saveSettings({ enabled: enableToggle.checked });
+  updateToggleLabel();
 });
 
 searchInput.addEventListener('input', () => {
@@ -264,6 +298,18 @@ exportBtn.addEventListener('click', exportRecords);
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
+  applyI18n();
   await loadSettings();
   await refresh();
+  updateToggleLabel();
 });
+
+/**
+ * Update toggle label based on state
+ */
+function updateToggleLabel() {
+  const label = document.querySelector('.toggle-label');
+  if (label) {
+    label.textContent = enableToggle.checked ? i18n('autoOrganizeEnabled') : i18n('autoOrganizeDisabled');
+  }
+}

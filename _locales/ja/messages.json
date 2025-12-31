@@ -1,0 +1,142 @@
+{
+  "extensionName": {
+    "message": "Stockpile - ダウンロード整理",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "MotionElementsやAudiioなどのストックサイトからダウンロードしたアセットを自動的に整理",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "Stockpile",
+    "description": "App title in popup"
+  },
+  "autoOrganizeEnabled": {
+    "message": "自動整理が有効",
+    "description": "Toggle label when enabled"
+  },
+  "autoOrganizeDisabled": {
+    "message": "自動整理が無効",
+    "description": "Toggle label when disabled"
+  },
+  "searchPlaceholder": {
+    "message": "ダウンロードを検索...",
+    "description": "Search input placeholder"
+  },
+  "allCategories": {
+    "message": "すべてのカテゴリ",
+    "description": "Category filter default"
+  },
+  "allSites": {
+    "message": "すべてのサイト",
+    "description": "Site filter default"
+  },
+  "downloads": {
+    "message": "件のダウンロード",
+    "description": "Downloads count label"
+  },
+  "noDownloads": {
+    "message": "ダウンロード履歴はありません",
+    "description": "Empty state message"
+  },
+  "export": {
+    "message": "エクスポート",
+    "description": "Export button"
+  },
+  "settings": {
+    "message": "設定",
+    "description": "Settings button title"
+  },
+  "settingsTitle": {
+    "message": "Stockpile 設定",
+    "description": "Settings page title"
+  },
+  "general": {
+    "message": "一般",
+    "description": "General settings section"
+  },
+  "baseFolderName": {
+    "message": "ベースフォルダ名",
+    "description": "Base folder setting label"
+  },
+  "baseFolderHelp": {
+    "message": "ダウンロードは ~/Downloads/[ベースフォルダ]/[サイト]/[カテゴリ]/ に保存されます",
+    "description": "Base folder help text"
+  },
+  "enableAutoOrganize": {
+    "message": "自動整理を有効化",
+    "description": "Auto-organize toggle title"
+  },
+  "enableAutoOrganizeDesc": {
+    "message": "ダウンロードを自動的にフォルダに振り分けます",
+    "description": "Auto-organize toggle description"
+  },
+  "sites": {
+    "message": "サイト",
+    "description": "Sites settings section"
+  },
+  "motionElementsDesc": {
+    "message": "動画、音楽、効果音、テンプレート",
+    "description": "MotionElements description"
+  },
+  "audiioDesc": {
+    "message": "音楽、効果音",
+    "description": "Audiio description"
+  },
+  "categoryMapping": {
+    "message": "カテゴリマッピング（MotionElements）",
+    "description": "Category mapping section"
+  },
+  "categoryMappingHelp": {
+    "message": "サイトのカテゴリをフォルダ名にマッピング",
+    "description": "Category mapping help text"
+  },
+  "dataManagement": {
+    "message": "データ管理",
+    "description": "Data management section"
+  },
+  "exportImport": {
+    "message": "エクスポート/インポート",
+    "description": "Export/Import label"
+  },
+  "exportDataJson": {
+    "message": "データをエクスポート (JSON)",
+    "description": "Export JSON button"
+  },
+  "importData": {
+    "message": "データをインポート",
+    "description": "Import button"
+  },
+  "dangerZone": {
+    "message": "危険な操作",
+    "description": "Danger zone section"
+  },
+  "clearHistory": {
+    "message": "すべてのダウンロード履歴を削除",
+    "description": "Clear history label"
+  },
+  "clearHistoryWarning": {
+    "message": "この操作は取り消せません。",
+    "description": "Clear history warning"
+  },
+  "clearAllData": {
+    "message": "すべてのデータを削除",
+    "description": "Clear all data button"
+  },
+  "saveSettings": {
+    "message": "設定を保存",
+    "description": "Save settings button"
+  },
+  "settingsSaved": {
+    "message": "設定を保存しました！",
+    "description": "Settings saved message"
+  },
+  "confirmClear": {
+    "message": "すべてのダウンロード履歴を削除してもよろしいですか？この操作は取り消せません。",
+    "description": "Clear data confirmation"
+  },
+  "dataCleared": {
+    "message": "すべてのデータを削除しました。",
+    "description": "Data cleared message"
+  }
+}

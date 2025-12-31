@@ -1,0 +1,142 @@
+{
+  "extensionName": {
+    "message": "Stockpile - Download Organizer",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "Automatically organize downloaded assets from stock sites like MotionElements and Audiio",
+    "description": "Extension description"
+  },
+  "appTitle": {
+    "message": "Stockpile",
+    "description": "App title in popup"
+  },
+  "autoOrganizeEnabled": {
+    "message": "Auto-organize enabled",
+    "description": "Toggle label when enabled"
+  },
+  "autoOrganizeDisabled": {
+    "message": "Auto-organize disabled",
+    "description": "Toggle label when disabled"
+  },
+  "searchPlaceholder": {
+    "message": "Search downloads...",
+    "description": "Search input placeholder"
+  },
+  "allCategories": {
+    "message": "All Categories",
+    "description": "Category filter default"
+  },
+  "allSites": {
+    "message": "All Sites",
+    "description": "Site filter default"
+  },
+  "downloads": {
+    "message": "downloads",
+    "description": "Downloads count label"
+  },
+  "noDownloads": {
+    "message": "No downloads yet",
+    "description": "Empty state message"
+  },
+  "export": {
+    "message": "Export",
+    "description": "Export button"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings button title"
+  },
+  "settingsTitle": {
+    "message": "Stockpile Settings",
+    "description": "Settings page title"
+  },
+  "general": {
+    "message": "General",
+    "description": "General settings section"
+  },
+  "baseFolderName": {
+    "message": "Base Folder Name",
+    "description": "Base folder setting label"
+  },
+  "baseFolderHelp": {
+    "message": "Downloads will be saved to: ~/Downloads/[Base Folder]/[Site]/[Category]/",
+    "description": "Base folder help text"
+  },
+  "enableAutoOrganize": {
+    "message": "Enable auto-organize",
+    "description": "Auto-organize toggle title"
+  },
+  "enableAutoOrganizeDesc": {
+    "message": "Automatically sort downloads into folders",
+    "description": "Auto-organize toggle description"
+  },
+  "sites": {
+    "message": "Sites",
+    "description": "Sites settings section"
+  },
+  "motionElementsDesc": {
+    "message": "Video, Music, Sound Effects, Templates",
+    "description": "MotionElements description"
+  },
+  "audiioDesc": {
+    "message": "Music, Sound Effects",
+    "description": "Audiio description"
+  },
+  "categoryMapping": {
+    "message": "Category Mapping (MotionElements)",
+    "description": "Category mapping section"
+  },
+  "categoryMappingHelp": {
+    "message": "Map site categories to folder names",
+    "description": "Category mapping help text"
+  },
+  "dataManagement": {
+    "message": "Data Management",
+    "description": "Data management section"
+  },
+  "exportImport": {
+    "message": "Export/Import",
+    "description": "Export/Import label"
+  },
+  "exportDataJson": {
+    "message": "Export Data (JSON)",
+    "description": "Export JSON button"
+  },
+  "importData": {
+    "message": "Import Data",
+    "description": "Import button"
+  },
+  "dangerZone": {
+    "message": "Danger Zone",
+    "description": "Danger zone section"
+  },
+  "clearHistory": {
+    "message": "Clear all download history",
+    "description": "Clear history label"
+  },
+  "clearHistoryWarning": {
+    "message": "This action cannot be undone.",
+    "description": "Clear history warning"
+  },
+  "clearAllData": {
+    "message": "Clear All Data",
+    "description": "Clear all data button"
+  },
+  "saveSettings": {
+    "message": "Save Settings",
+    "description": "Save settings button"
+  },
+  "settingsSaved": {
+    "message": "Settings saved successfully!",
+    "description": "Settings saved message"
+  },
+  "confirmClear": {
+    "message": "Are you sure you want to clear all download history? This action cannot be undone.",
+    "description": "Clear data confirmation"
+  },
+  "dataCleared": {
+    "message": "All data has been cleared.",
+    "description": "Data cleared message"
+  }
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stockpile Settings</title>
+  <title data-i18n="settingsTitle">Stockpile Settings</title>
   <style>
     * {
       box-sizing: border-box;
@@ -246,20 +246,20 @@
 </head>
 <body>
   <div class="container">
-    <h1>Stockpile Settings</h1>
+    <h1 data-i18n="settingsTitle">Stockpile Settings</h1>
 
     <div class="card">
-      <h2>General</h2>
+      <h2 data-i18n="general">General</h2>
       <div class="form-group">
-        <label for="baseFolder">Base Folder Name</label>
+        <label for="baseFolder" data-i18n="baseFolderName">Base Folder Name</label>
         <input type="text" id="baseFolder" placeholder="Stockpile">
-        <p class="help-text">Downloads will be saved to: ~/Downloads/[Base Folder]/[Site]/[Category]/</p>
+        <p class="help-text" data-i18n="baseFolderHelp">Downloads will be saved to: ~/Downloads/[Base Folder]/[Site]/[Category]/</p>
       </div>
 
       <div class="toggle-row">
         <div class="toggle-info">
-          <div class="toggle-title">Enable auto-organize</div>
-          <div class="toggle-desc">Automatically sort downloads into folders</div>
+          <div class="toggle-title" data-i18n="enableAutoOrganize">Enable auto-organize</div>
+          <div class="toggle-desc" data-i18n="enableAutoOrganizeDesc">Automatically sort downloads into folders</div>
         </div>
         <label class="toggle">
           <input type="checkbox" id="enableToggle">
@@ -269,12 +269,12 @@
     </div>
 
     <div class="card">
-      <h2>Sites</h2>
+      <h2 data-i18n="sites">Sites</h2>
 
       <div class="toggle-row">
         <div class="toggle-info">
           <div class="toggle-title">MotionElements</div>
-          <div class="toggle-desc">Video, Music, Sound Effects, Templates</div>
+          <div class="toggle-desc" data-i18n="motionElementsDesc">Video, Music, Sound Effects, Templates</div>
         </div>
         <label class="toggle">
           <input type="checkbox" id="motionElementsEnabled" checked>
@@ -285,7 +285,7 @@
       <div class="toggle-row">
         <div class="toggle-info">
           <div class="toggle-title">Audiio</div>
-          <div class="toggle-desc">Music, Sound Effects</div>
+          <div class="toggle-desc" data-i18n="audiioDesc">Music, Sound Effects</div>
         </div>
         <label class="toggle">
           <input type="checkbox" id="audiioEnabled" checked>
@@ -295,36 +295,36 @@
     </div>
 
     <div class="card">
-      <h2>Category Mapping (MotionElements)</h2>
-      <p class="help-text" style="margin-bottom: 12px;">Map site categories to folder names</p>
+      <h2 data-i18n="categoryMapping">Category Mapping (MotionElements)</h2>
+      <p class="help-text" style="margin-bottom: 12px;" data-i18n="categoryMappingHelp">Map site categories to folder names</p>
       <div id="motionElementsMappings" class="category-mapping">
         <!-- Populated by JS -->
       </div>
     </div>
 
     <div class="card">
-      <h2>Data Management</h2>
+      <h2 data-i18n="dataManagement">Data Management</h2>
       <div class="form-group">
-        <label>Export/Import</label>
+        <label data-i18n="exportImport">Export/Import</label>
         <div class="actions">
-          <button id="exportBtn" class="btn btn-secondary">Export Data (JSON)</button>
-          <button id="importBtn" class="btn btn-secondary">Import Data</button>
+          <button id="exportBtn" class="btn btn-secondary" data-i18n="exportDataJson">Export Data (JSON)</button>
+          <button id="importBtn" class="btn btn-secondary" data-i18n="importData">Import Data</button>
           <input type="file" id="importFile" accept=".json" style="display: none;">
         </div>
       </div>
     </div>
 
     <div class="card danger-zone">
-      <h2>Danger Zone</h2>
+      <h2 data-i18n="dangerZone">Danger Zone</h2>
       <div class="form-group">
-        <label>Clear all download history</label>
-        <p class="help-text" style="margin-bottom: 12px;">This action cannot be undone.</p>
-        <button id="clearDataBtn" class="btn btn-danger">Clear All Data</button>
+        <label data-i18n="clearHistory">Clear all download history</label>
+        <p class="help-text" style="margin-bottom: 12px;" data-i18n="clearHistoryWarning">This action cannot be undone.</p>
+        <button id="clearDataBtn" class="btn btn-danger" data-i18n="clearAllData">Clear All Data</button>
       </div>
     </div>
 
     <div class="actions">
-      <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+      <button id="saveBtn" class="btn btn-primary" data-i18n="saveSettings">Save Settings</button>
     </div>
 
     <div id="status" class="status"></div>

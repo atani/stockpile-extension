@@ -1,5 +1,23 @@
 // Options page script
 
+/**
+ * Apply i18n translations to elements with data-i18n attributes
+ */
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const message = chrome.i18n.getMessage(key);
+    if (message) el.textContent = message;
+  });
+}
+
+/**
+ * Get i18n message
+ */
+function i18n(key) {
+  return chrome.i18n.getMessage(key) || key;
+}
+
 const SETTINGS_KEY = 'settings';
 const DB_KEY = 'downloadHistory';
 
@@ -183,7 +201,7 @@ async function exportData() {
   a.click();
 
   URL.revokeObjectURL(url);
-  showStatus('Data exported successfully');
+  showStatus(i18n('settingsSaved'));
 }
 
 /**
@@ -225,23 +243,23 @@ async function importData(file) {
  * Clear all data
  */
 async function clearAllData() {
-  if (!confirm('Are you sure you want to clear all download history? This cannot be undone.')) {
+  if (!confirm(i18n('confirmClear'))) {
     return;
   }
 
-  if (!confirm('This is your last chance. Delete all data?')) {
+  if (!confirm(i18n('confirmClear'))) {
     return;
   }
 
   await chrome.storage.local.remove(DB_KEY);
-  showStatus('All download history cleared');
+  showStatus(i18n('dataCleared'));
 }
 
 // Event Listeners
 saveBtn.addEventListener('click', async () => {
   collectFormData();
   await saveSettings();
-  showStatus('Settings saved');
+  showStatus(i18n('settingsSaved'));
 });
 
 exportBtn.addEventListener('click', exportData);
@@ -262,6 +280,7 @@ clearDataBtn.addEventListener('click', clearAllData);
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
+  applyI18n();
   await loadSettings();
   populateForm(currentSettings);
 });
