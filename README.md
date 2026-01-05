@@ -1,6 +1,10 @@
 # Stockpile - Download Organizer
 
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dghocnhifhkndkmolgkhcibnkapikjil)](https://chromewebstore.google.com/detail/stockpile-download-organi/dghocnhifhkndkmolgkhcibnkapikjil)
+
 MotionElements や Audiio などのストックサイトからダウンロードしたアセットを自動的に整理する Chrome 拡張機能です。
+
+**[Chrome Web Store からインストール](https://chromewebstore.google.com/detail/stockpile-download-organi/dghocnhifhkndkmolgkhcibnkapikjil)**
 
 ## スクリーンショット
 
@@ -43,11 +47,15 @@ Downloads/
 
 ## インストール
 
-1. このリポジトリをクローンまたはダウンロード
+[Chrome Web Store](https://chromewebstore.google.com/detail/stockpile-download-organi/dghocnhifhkndkmolgkhcibnkapikjil) からインストールしてください。
+
+### 開発者向け
+
+1. このリポジトリをクローン
 2. Chrome で `chrome://extensions` を開く
 3. 右上の「デベロッパーモード」を有効化
 4. 「パッケージ化されていない拡張機能を読み込む」をクリック
-5. このフォルダを選択
+5. クローンしたフォルダを選択
 
 ## 使い方
 
