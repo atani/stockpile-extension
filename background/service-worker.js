@@ -118,6 +118,10 @@ async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
                pageUrl.includes('ryu110.com')) {
       siteName = 'RyuItoMusic';
       category = 'BGM';
+    } else if (url.includes('fukidesign.com') || referrer.includes('fukidesign.com') ||
+               pageUrl.includes('fukidesign.com')) {
+      siteName = 'FukiDesign';
+      category = 'Fukidashi';
     }
   }
 
@@ -214,7 +218,8 @@ function isTargetSite(url, referrer, filename) {
     'bgmer.net',
     'maou.audio',
     'bgmusic.jp',
-    'ryu110.com'
+    'ryu110.com',
+    'fukidesign.com'
   ];
 
   // Check URL

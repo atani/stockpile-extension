@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "icons": {
@@ -23,6 +23,7 @@
     "*://*.maou.audio/*",
     "*://*.bgmusic.jp/*",
     "*://*.ryu110.com/*",
+    "*://*.fukidesign.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -65,6 +66,11 @@
     {
       "matches": ["*://*.ryu110.com/*"],
       "js": ["content/ryuitomusic.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.fukidesign.com/*"],
+      "js": ["content/fukidesign.js"],
       "run_at": "document_idle"
     }
   ],

@@ -30,6 +30,7 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 | [魔王魂](https://maou.audio/) | BGM, SE, Vocal |
 | [BGMusic](https://bgmusic.jp/) | BGM, Jingle |
 | [RYU ITO MUSIC](https://ryu110.com/) | BGM |
+| [フキダシデザイン](https://fukidesign.com/) | Fukidashi |
 
 ## フォルダ構造
 
@@ -60,8 +61,10 @@ Downloads/
     ├── BGMusic/
     │   ├── BGM/
     │   └── Jingle/
-    └── RyuItoMusic/
-        └── BGM/
+    ├── RyuItoMusic/
+    │   └── BGM/
+    └── FukiDesign/
+        └── Fukidashi/
 ```
 
 ## インストール
@@ -105,7 +108,8 @@ stockpile-extension/
 │   ├── bgmer.js           # BGMer 用コンテンツスクリプト
 │   ├── maoudamashii.js    # 魔王魂 用コンテンツスクリプト
 │   ├── bgmusic.js         # BGMusic 用コンテンツスクリプト
-│   └── ryuitomusic.js     # RYU ITO MUSIC 用コンテンツスクリプト
+│   ├── ryuitomusic.js     # RYU ITO MUSIC 用コンテンツスクリプト
+│   └── fukidesign.js      # フキダシデザイン 用コンテンツスクリプト
 ├── lib/
 │   ├── storage.js         # 設定管理
 │   └── database.js        # ダウンロード履歴管理
