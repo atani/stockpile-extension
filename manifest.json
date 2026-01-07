@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "icons": {
@@ -18,6 +18,11 @@
   "host_permissions": [
     "*://*.motionelements.com/*",
     "*://*.audiio.com/*",
+    "*://*.dova-s.jp/*",
+    "*://*.bgmer.net/*",
+    "*://*.maou.audio/*",
+    "*://*.bgmusic.jp/*",
+    "*://*.ryu110.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -35,6 +40,31 @@
     {
       "matches": ["*://*.audiio.com/*"],
       "js": ["content/audiio.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.dova-s.jp/*"],
+      "js": ["content/dova.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.bgmer.net/*"],
+      "js": ["content/bgmer.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.maou.audio/*"],
+      "js": ["content/maoudamashii.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.bgmusic.jp/*"],
+      "js": ["content/bgmusic.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.ryu110.com/*"],
+      "js": ["content/ryuitomusic.js"],
       "run_at": "document_idle"
     }
   ],

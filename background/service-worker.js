@@ -83,6 +83,41 @@ async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
         const extCategory = getCategoryFromExtension(filename);
         category = (extCategory === 'Other') ? 'BGM' : extCategory;
       }
+    } else if (url.includes('dova-s.jp') || referrer.includes('dova-s.jp') ||
+               pageUrl.includes('dova-s.jp')) {
+      siteName = 'DOVA-SYNDROME';
+      // Check pageUrl for SE page
+      if (pageUrl.includes('/se/')) {
+        category = 'SE';
+      } else {
+        category = 'BGM';
+      }
+    } else if (url.includes('bgmer.net') || referrer.includes('bgmer.net') ||
+               pageUrl.includes('bgmer.net')) {
+      siteName = 'BGMer';
+      category = 'BGM';
+    } else if (url.includes('maou.audio') || referrer.includes('maou.audio') ||
+               pageUrl.includes('maou.audio')) {
+      siteName = 'MaouDamashii';
+      if (pageUrl.includes('/category/se/') || pageUrl.includes('/se/')) {
+        category = 'SE';
+      } else if (pageUrl.includes('/category/song/') || pageUrl.includes('/song/')) {
+        category = 'Vocal';
+      } else {
+        category = 'BGM';
+      }
+    } else if (url.includes('bgmusic.jp') || referrer.includes('bgmusic.jp') ||
+               pageUrl.includes('bgmusic.jp')) {
+      siteName = 'BGMusic';
+      if (pageUrl.includes('/freejingle/') || pageUrl.includes('jingle')) {
+        category = 'Jingle';
+      } else {
+        category = 'BGM';
+      }
+    } else if (url.includes('ryu110.com') || referrer.includes('ryu110.com') ||
+               pageUrl.includes('ryu110.com')) {
+      siteName = 'RyuItoMusic';
+      category = 'BGM';
     }
   }
 
@@ -174,7 +209,12 @@ function getCategoryFromExtension(filename) {
 function isTargetSite(url, referrer, filename) {
   const targetDomains = [
     'motionelements',
-    'audiio'
+    'audiio',
+    'dova-s.jp',
+    'bgmer.net',
+    'maou.audio',
+    'bgmusic.jp',
+    'ryu110.com'
   ];
 
   // Check URL

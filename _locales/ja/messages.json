@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extensionDescription": {
-    "message": "MotionElementsやAudiioなどのストックサイトからダウンロードしたアセットを自動的に整理",
+    "message": "MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイトからダウンロードしたアセットを自動的に整理",
     "description": "Extension description"
   },
   "appTitle": {
@@ -138,5 +138,49 @@
   "dataCleared": {
     "message": "すべてのデータを削除しました。",
     "description": "Data cleared message"
+  },
+  "autoExtract": {
+    "message": "ZIP ファイルの自動解凍",
+    "description": "Auto extract section title"
+  },
+  "autoExtractDesc": {
+    "message": "ダウンロードした ZIP ファイルを自動的に解凍し、不要な __MACOSX フォルダを削除します。お使いの OS 用のスクリプトをダウンロードし、セットアップ手順に従ってください。",
+    "description": "Auto extract description"
+  },
+  "setupInstructions": {
+    "message": "セットアップ手順",
+    "description": "Setup instructions summary"
+  },
+  "macStep1": {
+    "message": "スクリプトをダウンロードして、任意の場所に保存します",
+    "description": "macOS step 1"
+  },
+  "macStep2": {
+    "message": "ターミナルを開いて実行: chmod +x /path/to/auto-extract-mac.sh",
+    "description": "macOS step 2"
+  },
+  "macStep3": {
+    "message": "スクリプトを編集して、Stockpile フォルダのパスを設定します",
+    "description": "macOS step 3"
+  },
+  "macStep4": {
+    "message": "手動で実行するか、LaunchAgent を設定して自動化します",
+    "description": "macOS step 4"
+  },
+  "winStep1": {
+    "message": "スクリプトをダウンロードして、任意の場所に保存します",
+    "description": "Windows step 1"
+  },
+  "winStep2": {
+    "message": "スクリプトを編集して、Stockpile フォルダのパスを設定します",
+    "description": "Windows step 2"
+  },
+  "winStep3": {
+    "message": ".ps1 ファイルを右クリックして「PowerShell で実行」を選択",
+    "description": "Windows step 3"
+  },
+  "winStep4": {
+    "message": "自動化するには、Windows タスクスケジューラでタスクを設定します",
+    "description": "Windows step 4"
   }
 }

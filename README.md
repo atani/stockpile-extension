@@ -2,7 +2,7 @@
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dghocnhifhkndkmolgkhcibnkapikjil)](https://chromewebstore.google.com/detail/stockpile-download-organi/dghocnhifhkndkmolgkhcibnkapikjil)
 
-MotionElements や Audiio などのストックサイトからダウンロードしたアセットを自動的に整理する Chrome 拡張機能です。
+MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイトからダウンロードしたアセットを自動的に整理する Chrome 拡張機能です。
 
 **[Chrome Web Store からインストール](https://chromewebstore.google.com/detail/stockpile-download-organi/dghocnhifhkndkmolgkhcibnkapikjil)**
 
@@ -25,6 +25,11 @@ MotionElements や Audiio などのストックサイトからダウンロード
 |--------|----------|
 | MotionElements | Video, BGM, SE, Mogrt, Preset, AE_Template, LUT, Photo |
 | Audiio | BGM, SE |
+| DOVA-SYNDROME | BGM, SE |
+| BGMer | BGM |
+| 魔王魂 | BGM, SE, Vocal |
+| BGMusic | BGM, Jingle |
+| RYU ITO MUSIC | BGM |
 
 ## フォルダ構造
 
@@ -40,9 +45,23 @@ Downloads/
     │   ├── Mogrt/
     │   ├── Preset/
     │   └── AE_Template/
-    └── Audiio/
-        ├── BGM/
-        └── SE/
+    ├── Audiio/
+    │   ├── BGM/
+    │   └── SE/
+    ├── DOVA-SYNDROME/
+    │   ├── BGM/
+    │   └── SE/
+    ├── BGMer/
+    │   └── BGM/
+    ├── MaouDamashii/
+    │   ├── BGM/
+    │   ├── SE/
+    │   └── Vocal/
+    ├── BGMusic/
+    │   ├── BGM/
+    │   └── Jingle/
+    └── RyuItoMusic/
+        └── BGM/
 ```
 
 ## インストール
@@ -81,7 +100,12 @@ stockpile-extension/
 │   └── service-worker.js  # バックグラウンド処理
 ├── content/
 │   ├── motionelements.js  # MotionElements 用コンテンツスクリプト
-│   └── audiio.js          # Audiio 用コンテンツスクリプト
+│   ├── audiio.js          # Audiio 用コンテンツスクリプト
+│   ├── dova.js            # DOVA-SYNDROME 用コンテンツスクリプト
+│   ├── bgmer.js           # BGMer 用コンテンツスクリプト
+│   ├── maoudamashii.js    # 魔王魂 用コンテンツスクリプト
+│   ├── bgmusic.js         # BGMusic 用コンテンツスクリプト
+│   └── ryuitomusic.js     # RYU ITO MUSIC 用コンテンツスクリプト
 ├── lib/
 │   ├── storage.js         # 設定管理
 │   └── database.js        # ダウンロード履歴管理

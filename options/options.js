@@ -63,9 +63,126 @@ const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFile = document.getElementById('importFile');
 const clearDataBtn = document.getElementById('clearDataBtn');
+const downloadMacScript = document.getElementById('downloadMacScript');
+const downloadWinScript = document.getElementById('downloadWinScript');
 const statusEl = document.getElementById('status');
 
 let currentSettings = null;
+
+// Auto-extract scripts content
+const MAC_SCRIPT = `#!/bin/bash
+# Stockpile Auto-Extract Script for macOS
+# Automatically extracts ZIP files and removes __MACOSX folders
+#
+# Usage:
+#   1. Edit WATCH_DIR below to your Stockpile download folder
+#   2. Run: chmod +x auto-extract-mac.sh
+#   3. Run: ./auto-extract-mac.sh
+#
+# For automatic execution, set up as a LaunchAgent (see README)
+
+# === CONFIGURATION ===
+# Change this to your Stockpile download folder
+WATCH_DIR="$HOME/Downloads/Stockpile"
+
+# === SCRIPT ===
+if [ ! -d "$WATCH_DIR" ]; then
+  echo "Error: Directory not found: $WATCH_DIR"
+  echo "Please edit WATCH_DIR in this script to match your Stockpile folder."
+  exit 1
+fi
+
+echo "Stockpile Auto-Extract"
+echo "======================"
+echo "Watching: $WATCH_DIR"
+echo ""
+
+# Find and extract all ZIP files
+find "$WATCH_DIR" -name "*.zip" -type f | while read zipfile; do
+  dir=$(dirname "$zipfile")
+  filename=$(basename "$zipfile" .zip)
+
+  echo "Extracting: $filename"
+
+  # Extract to same directory (exclude __MACOSX)
+  unzip -o -q "$zipfile" -d "$dir" -x "__MACOSX/*"
+
+  # Remove the zip file
+  rm "$zipfile"
+
+  echo "  Done!"
+done
+
+# Clean up any remaining __MACOSX folders
+find "$WATCH_DIR" -name "__MACOSX" -type d -exec rm -rf {} + 2>/dev/null
+
+echo ""
+echo "All ZIP files extracted!"
+`;
+
+const WIN_SCRIPT = `# Stockpile Auto-Extract Script for Windows
+# Automatically extracts ZIP files and removes __MACOSX folders
+#
+# Usage:
+#   1. Edit $WatchDir below to your Stockpile download folder
+#   2. Right-click this file and select "Run with PowerShell"
+#
+# For automatic execution, set up as a Scheduled Task (see README)
+
+# === CONFIGURATION ===
+# Change this to your Stockpile download folder
+$WatchDir = "$env:USERPROFILE\\Downloads\\Stockpile"
+
+# === SCRIPT ===
+if (-not (Test-Path $WatchDir)) {
+    Write-Host "Error: Directory not found: $WatchDir" -ForegroundColor Red
+    Write-Host "Please edit \`$WatchDir in this script to match your Stockpile folder."
+    Read-Host "Press Enter to exit"
+    exit 1
+}
+
+Write-Host "Stockpile Auto-Extract" -ForegroundColor Green
+Write-Host "======================"
+Write-Host "Watching: $WatchDir"
+Write-Host ""
+
+# Find all ZIP files
+$zipFiles = Get-ChildItem -Path $WatchDir -Filter "*.zip" -Recurse -File
+
+if ($zipFiles.Count -eq 0) {
+    Write-Host "No ZIP files found."
+} else {
+    foreach ($zipFile in $zipFiles) {
+        $destDir = $zipFile.DirectoryName
+        $fileName = $zipFile.BaseName
+
+        Write-Host "Extracting: $fileName"
+
+        try {
+            Expand-Archive -Path $zipFile.FullName -DestinationPath $destDir -Force
+
+            # Remove __MACOSX folder if exists
+            $macosxPath = Join-Path $destDir "__MACOSX"
+            if (Test-Path $macosxPath) {
+                Remove-Item -Path $macosxPath -Recurse -Force
+                Write-Host "  Removed __MACOSX folder"
+            }
+
+            Remove-Item -Path $zipFile.FullName -Force
+            Write-Host "  Done!"
+        } catch {
+            Write-Host "  Error: $_" -ForegroundColor Red
+        }
+    }
+}
+
+# Clean up any remaining __MACOSX folders
+Get-ChildItem -Path $WatchDir -Filter "__MACOSX" -Recurse -Directory | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+
+Write-Host ""
+Write-Host "All ZIP files extracted!" -ForegroundColor Green
+Read-Host "Press Enter to exit"
+`;
 
 /**
  * Load settings
@@ -277,6 +394,31 @@ importFile.addEventListener('change', (e) => {
 });
 
 clearDataBtn.addEventListener('click', clearAllData);
+
+// Script download handlers
+downloadMacScript.addEventListener('click', () => {
+  downloadScript(MAC_SCRIPT, 'auto-extract-mac.sh', 'text/x-shellscript');
+});
+
+downloadWinScript.addEventListener('click', () => {
+  downloadScript(WIN_SCRIPT, 'auto-extract-win.ps1', 'text/plain');
+});
+
+/**
+ * Download script file
+ */
+function downloadScript(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(url);
+  showStatus(`Downloaded ${filename}`);
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
