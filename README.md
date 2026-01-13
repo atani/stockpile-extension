@@ -21,16 +21,16 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 
 ## 対応サイト
 
-| サイト | カテゴリ |
-|--------|----------|
-| [MotionElements](https://www.motionelements.com/ja/?ref=8581ETCWG) | Video, BGM, SE, Mogrt, Preset, AE_Template, LUT, Photo |
-| [Audiio](https://audiio.com/) | BGM, SE |
-| [DOVA-SYNDROME](https://dova-s.jp/) | BGM, SE |
-| [BGMer](https://bgmer.net/) | BGM |
-| [魔王魂](https://maou.audio/) | BGM, SE, Vocal |
-| [BGMusic](https://bgmusic.jp/) | BGM, Jingle |
-| [RYU ITO MUSIC](https://ryu110.com/) | BGM |
-| [フキダシデザイン](https://fukidesign.com/) | Fukidashi |
+以下のサイトに対応しています。各サイトのダウンロード項目を自動で整理します。
+
+- [MotionElements](https://www.motionelements.com/ja/?ref=8581ETCWG)
+- [Audiio](https://audiio.com/)
+- [DOVA-SYNDROME](https://dova-s.jp/)
+- [BGMer](https://bgmer.net/)
+- [魔王魂](https://maou.audio/)
+- [BGMusic](https://bgmusic.jp/)
+- [RYU ITO MUSIC](https://ryu110.com/)
+- [フキダシデザイン](https://fukidesign.com/)
 
 ## フォルダ構造
 

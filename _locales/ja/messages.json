@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extensionDescription": {
-    "message": "MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイトからダウンロードしたアセットを自動的に整理",
+    "message": "ストックサイトからダウンロードしたアセットをサイト・カテゴリ別にフォルダへ自動整理",
     "description": "Extension description"
   },
   "appTitle": {
