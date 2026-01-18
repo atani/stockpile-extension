@@ -80,7 +80,8 @@ async function run() {
       `--load-extension=${EXTENSION_DIR}`,
       '--no-sandbox',
       '--disable-setuid-sandbox',
-      ...(isHeadless ? ['--headless=new'] : [])
+      '--disable-gpu',
+      '--disable-dev-shm-usage'
     ]
   });
 

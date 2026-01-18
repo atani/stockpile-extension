@@ -15,17 +15,19 @@
 - [x] Brave での実機認可テスト
 
 ## Milestone 2 (Site Pack)
-- [x] Artlist / Epidemic Sound / Envato の content script 追加
-- [x] JSON-LD などの抽出強化
-- [ ] 各サイトでの実測調整（タイトル/タグ/カテゴリ）
-- [ ] Pro 設定でサイトごとのON/OFFの確認
+- [x] Artlist の content script 追加と抽出強化
+- [x] Artlist の実測調整（タイトル/タグ/カテゴリ）
+- [x] Pro 設定でサイトごとのON/OFFの確認（Artlist）
+- [ ] Epidemic Sound / Envato の content script 追加
+- [ ] Epidemic Sound / Envato の実測調整（タイトル/タグ/カテゴリ）
+- [ ] Pro 設定でサイトごとのON/OFFの確認（Epidemic/Envato）
 
 ## Milestone 3 (Release Hygiene)
 - [ ] Dev: Pro Override を削除 or 非表示
 - [ ] `driveWebClientId` 設定欄の公開方針を決定（非表示/管理者のみ）
 - [ ] 課金導線の文言・スクショの最終調整
 - [ ] 追加権限の説明（notifications / identity）を記載
-- [ ] E2EテストとCIの動作確認
+- [x] E2EテストとCIの動作確認
 
 ## Post-Release
 - [ ] Drive 同期の差分/履歴管理（オプション）
