@@ -28,6 +28,19 @@
       </label>
     </div>
 
+    <div class="pro-section" id="proSection">
+      <div class="pro-header">
+        <span class="pro-title" data-i18n="proFeatures">Pro Features</span>
+        <span class="pro-badge" data-i18n="proBadge">Pro</span>
+      </div>
+      <div class="pro-status" id="proStatus"></div>
+      <ul class="pro-list">
+        <li data-i18n="proSitePackFull">Site Pack (Artlist / Epidemic Sound / Envato)</li>
+        <li data-i18n="proDriveSync">Google Drive Sync</li>
+      </ul>
+      <button id="upgradeBtn" class="btn btn-primary" data-i18n="upgrade">Upgrade</button>
+    </div>
+
     <div class="search-section">
       <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Search downloads..." class="search-input">
       <div class="filters">
@@ -53,6 +66,7 @@
     </div>
   </div>
 
+  <script src="../lib/extpay.vendor.js"></script>
   <script src="popup.js" type="module"></script>
 </body>
 </html>

@@ -33,6 +33,8 @@ function i18n(key) {
   return chrome.i18n.getMessage(key) || key;
 }
 
+import { getPaidStatus, openPaymentPage, onPaid } from '../lib/extpay.js';
+
 // Import from lib (need to use dynamic import for popup)
 const DB_KEY = 'downloadHistory';
 const SETTINGS_KEY = 'settings';
@@ -46,6 +48,8 @@ const downloadList = document.getElementById('downloadList');
 const totalCount = document.getElementById('totalCount');
 const settingsBtn = document.getElementById('settingsBtn');
 const exportBtn = document.getElementById('exportBtn');
+const proStatusEl = document.getElementById('proStatus');
+const upgradeBtn = document.getElementById('upgradeBtn');
 
 // State
 let allRecords = [];
@@ -54,6 +58,7 @@ let currentFilters = {
   category: '',
   site: ''
 };
+let isProUser = false;
 
 /**
  * Load settings
@@ -301,6 +306,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   applyI18n();
   await loadSettings();
   await refresh();
+  await refreshProStatus();
   updateToggleLabel();
 });
 
@@ -313,3 +319,28 @@ function updateToggleLabel() {
     label.textContent = enableToggle.checked ? i18n('autoOrganizeEnabled') : i18n('autoOrganizeDisabled');
   }
 }
+
+function updateProUI(paid) {
+  isProUser = paid;
+  if (proStatusEl) {
+    proStatusEl.textContent = paid ? i18n('proStatusActive') : i18n('proStatusInactive');
+  }
+  if (upgradeBtn) {
+    upgradeBtn.style.display = paid ? 'none' : 'inline-block';
+  }
+}
+
+async function refreshProStatus() {
+  const result = await getPaidStatus();
+  updateProUI(!!result.paid);
+}
+
+upgradeBtn.addEventListener('click', () => {
+  if (!openPaymentPage()) {
+    alert(i18n('upgradeFailed'));
+  }
+});
+
+onPaid(() => {
+  refreshProStatus();
+});
