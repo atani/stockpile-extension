@@ -7,7 +7,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:e2e",
+    "test:e2e": "node scripts/run-e2e.js"
   },
   "repository": {
     "type": "git",
