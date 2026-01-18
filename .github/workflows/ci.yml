@@ -44,6 +44,4 @@ jobs:
             libvulkan1
 
       - name: E2E Test
-        run: xvfb-run -a npm run test:e2e
-        env:
-          HEADLESS: "false"
+        run: npm run test:e2e
