@@ -74,12 +74,13 @@ async function getExtensionId(page) {
 async function run() {
   const isHeadless = process.env.HEADLESS !== 'false';
   const browser = await puppeteer.launch({
-    headless: isHeadless ? 'new' : false,
+    headless: false,
     args: [
       `--disable-extensions-except=${EXTENSION_DIR}`,
       `--load-extension=${EXTENSION_DIR}`,
       '--no-sandbox',
-      '--disable-setuid-sandbox'
+      '--disable-setuid-sandbox',
+      ...(isHeadless ? ['--headless=new'] : [])
     ]
   });
 
