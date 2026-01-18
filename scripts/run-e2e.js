@@ -6,6 +6,20 @@ const EXTENSION_DIR = path.resolve(__dirname, '..');
 const EXTENSION_NAME = 'Stockpile';
 
 async function getExtensionId(page) {
+  const browser = page.browser();
+  const findFromTargets = () => {
+    const targets = browser.targets();
+    const candidate = targets.find(t => t.url().startsWith('chrome-extension://'));
+    return candidate ? candidate.url().split('/')[2] : null;
+  };
+
+  const start = Date.now();
+  while (Date.now() - start < 8000) {
+    const id = findFromTargets();
+    if (id) return id;
+    await new Promise(r => setTimeout(r, 200));
+  }
+
   await page.goto('chrome://extensions/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('extensions-manager', { timeout: 10000 });
 
@@ -52,21 +66,15 @@ async function getExtensionId(page) {
 
   const match = extensions.find(ext => ext.name.includes(EXTENSION_NAME));
   if (match) return match.id;
-
   if (extensions.length > 0) return extensions[0].id;
 
-  const targets = page.browser().targets();
-  const serviceWorker = targets.find(t => t.type() === 'service_worker' && t.url().startsWith('chrome-extension://'));
-  if (serviceWorker) {
-    return serviceWorker.url().split('/')[2];
-  }
-
-  throw new Error('No extensions found in chrome://extensions');
+  throw new Error('No extensions found in chrome://extensions or targets');
 }
 
 async function run() {
+  const isHeadless = process.env.HEADLESS !== 'false';
   const browser = await puppeteer.launch({
-    headless: 'new',
+    headless: isHeadless ? 'new' : false,
     args: [
       `--disable-extensions-except=${EXTENSION_DIR}`,
       `--load-extension=${EXTENSION_DIR}`,
