@@ -209,10 +209,90 @@
       background: #d0d0d0;
     }
 
+    .pro-card .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .pro-badge {
+      background: #111;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .pro-status {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .pro-locked {
+      opacity: 0.6;
+    }
+
+    .pro-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pro-inline-status {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #2e7d32;
+      min-height: 16px;
+    }
+
+    .pro-inline-status.error {
+      color: #c62828;
+    }
+
+    .input-inline {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .dev-note {
+      font-size: 11px;
+      color: #b35c00;
+      margin-top: 8px;
+    }
+
+    .toggle input:disabled + .toggle-slider {
+      background: #ddd;
+      cursor: not-allowed;
+    }
+
+    .toggle input:disabled + .toggle-slider::after {
+      background: #f5f5f5;
+      box-shadow: none;
+    }
+
     .actions {
       display: flex;
       gap: 12px;
       margin-top: 20px;
+    }
+
+    .save-status {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #2e7d32;
+      min-height: 16px;
+    }
+
+    .save-status.error {
+      color: #c62828;
     }
 
     .status {
@@ -355,6 +435,115 @@
       </div>
     </div>
 
+    <div class="card pro-card" id="proCard">
+      <div class="card-header">
+        <h2 data-i18n="proFeatures">Pro Features</h2>
+        <span class="pro-badge" data-i18n="proBadge">Pro</span>
+      </div>
+      <div class="pro-status" id="proStatus"></div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title" data-i18n="proSitePack">Site Pack</div>
+          <div class="toggle-desc" data-i18n="proSitePackDesc">Artlist / Epidemic Sound / Envato</div>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title">Artlist</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="artlistEnabled" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title">Epidemic Sound</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="epidemicSoundEnabled" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title">Envato</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="envatoEnabled" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title" data-i18n="proDriveSync">Google Drive Sync</div>
+          <div class="toggle-desc" data-i18n="proDriveSyncDesc">Sync settings and history to Drive</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="driveSyncEnabled" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title" data-i18n="proDriveSyncSettings">Sync Settings</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="driveSyncSettings" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title" data-i18n="proDriveSyncHistory">Sync History</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="driveSyncHistory" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title" data-i18n="proDriveSyncExports">Sync Exports</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="driveSyncExports" data-pro-input>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-title" data-i18n="proDevOverride">Dev: Pro Override</div>
+          <div class="toggle-desc" data-i18n="proDevOverrideDesc">Enable Pro features for local testing</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="proDevOverride">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label data-i18n="proDriveWebClientId">Drive Web Client ID (Brave)</label>
+        <input type="text" id="driveWebClientId" class="input-inline" placeholder="xxxx.apps.googleusercontent.com">
+        <p class="help-text" data-i18n="proDriveWebClientIdDesc">Set Web OAuth client ID for Brave OAuth flow.</p>
+      </div>
+      <div class="dev-note" data-i18n="proDevOverrideNote">Remove or disable before release.</div>
+
+      <div class="pro-actions">
+        <button id="upgradeBtn" class="btn btn-primary" data-i18n="upgrade">Upgrade</button>
+        <button id="driveSyncNowBtn" class="btn btn-secondary" data-i18n="syncNow">Sync Now</button>
+      </div>
+      <div class="pro-inline-status" id="driveSyncStatus"></div>
+    </div>
+
     <div class="card">
       <h2 data-i18n="categoryMapping">Category Mapping (MotionElements)</h2>
       <p class="help-text" style="margin-bottom: 12px;" data-i18n="categoryMappingHelp">Map site categories to folder names</p>
@@ -425,10 +614,12 @@
     <div class="actions">
       <button id="saveBtn" class="btn btn-primary" data-i18n="saveSettings">Save Settings</button>
     </div>
+    <div id="saveStatus" class="save-status"></div>
 
     <div id="status" class="status"></div>
   </div>
 
+  <script src="../lib/extpay.vendor.js"></script>
   <script src="options.js" type="module"></script>
 </body>
 </html>

@@ -47,6 +47,114 @@
     "message": "Settings",
     "description": "Settings button title"
   },
+  "proFeatures": {
+    "message": "Pro Features",
+    "description": "Pro features section title"
+  },
+  "proBadge": {
+    "message": "Pro",
+    "description": "Pro badge label"
+  },
+  "proStatusActive": {
+    "message": "Pro is active",
+    "description": "Pro active status"
+  },
+  "proStatusInactive": {
+    "message": "Unlock Pro features",
+    "description": "Pro inactive status"
+  },
+  "upgrade": {
+    "message": "Upgrade",
+    "description": "Upgrade button"
+  },
+  "upgradeFailed": {
+    "message": "Could not open payment page",
+    "description": "Upgrade failure message"
+  },
+  "proSitePack": {
+    "message": "Site Pack",
+    "description": "Pro site pack label"
+  },
+  "proSitePackFull": {
+    "message": "Site Pack (Artlist / Epidemic Sound / Envato)",
+    "description": "Pro site pack full label"
+  },
+  "proSitePackDesc": {
+    "message": "Artlist / Epidemic Sound / Envato",
+    "description": "Pro site pack description"
+  },
+  "proDriveSync": {
+    "message": "Google Drive Sync",
+    "description": "Drive sync label"
+  },
+  "proDriveSyncDesc": {
+    "message": "Sync settings and history to Drive",
+    "description": "Drive sync description"
+  },
+  "proDriveSyncSettings": {
+    "message": "Sync Settings",
+    "description": "Drive sync settings toggle"
+  },
+  "proDriveSyncHistory": {
+    "message": "Sync History",
+    "description": "Drive sync history toggle"
+  },
+  "proDriveSyncExports": {
+    "message": "Sync Exports",
+    "description": "Drive sync exports toggle"
+  },
+  "proDevOverride": {
+    "message": "Dev: Pro Override",
+    "description": "Dev pro override label"
+  },
+  "proDevOverrideDesc": {
+    "message": "Enable Pro features for local testing",
+    "description": "Dev pro override description"
+  },
+  "proDevOverrideNote": {
+    "message": "Remove or disable before release.",
+    "description": "Dev pro override note"
+  },
+  "proDriveWebClientId": {
+    "message": "Drive Web Client ID (Brave)",
+    "description": "Drive web client id label"
+  },
+  "proDriveWebClientIdDesc": {
+    "message": "Set Web OAuth client ID for Brave OAuth flow.",
+    "description": "Drive web client id description"
+  },
+  "driveSyncWebClientMissing": {
+    "message": "Web OAuth client ID is missing. Please set it in Options.",
+    "description": "Drive sync web client missing"
+  },
+  "syncNow": {
+    "message": "Sync Now",
+    "description": "Drive sync now button"
+  },
+  "driveSyncSuccess": {
+    "message": "Drive sync completed",
+    "description": "Drive sync success message"
+  },
+  "driveSyncFailed": {
+    "message": "Drive sync failed",
+    "description": "Drive sync failure message"
+  },
+  "driveSyncNotifyTitle": {
+    "message": "Stockpile",
+    "description": "Drive sync notification title"
+  },
+  "driveSyncNotifySuccess": {
+    "message": "Google Drive sync completed",
+    "description": "Drive sync notification success"
+  },
+  "driveSyncNotifyFailed": {
+    "message": "Google Drive sync failed",
+    "description": "Drive sync notification failure"
+  },
+  "driveSyncAuthNotSupported": {
+    "message": "This browser does not support this Google OAuth flow. Please try in Chrome.",
+    "description": "Drive sync auth unsupported"
+  },
   "settingsTitle": {
     "message": "Stockpile Settings",
     "description": "Settings page title"
