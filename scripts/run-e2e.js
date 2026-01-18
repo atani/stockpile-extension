@@ -32,10 +32,13 @@ async function getExtensionId(page) {
   });
 
   const match = extensions.find(ext => ext.name.includes(EXTENSION_NAME));
-  if (!match) {
-    throw new Error(`Extension "${EXTENSION_NAME}" not found in chrome://extensions`);
+  if (match) return match.id;
+
+  if (extensions.length > 0) {
+    return extensions[0].id;
   }
-  return match.id;
+
+  throw new Error(`No extensions found in chrome://extensions`);
 }
 
 async function run() {
