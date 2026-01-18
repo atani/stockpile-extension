@@ -9,12 +9,31 @@ async function getExtensionId(page) {
   await page.goto('chrome://extensions/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('extensions-manager', { timeout: 10000 });
 
-  const extensions = await page.evaluate(() => {
+  const extensions = await page.evaluate(async () => {
     const manager = document.querySelector('extensions-manager');
-    if (!manager || !manager.shadowRoot) return [];
-    const itemList = manager.shadowRoot.querySelector('extensions-item-list');
-    if (!itemList || !itemList.shadowRoot) return [];
-    const items = itemList.shadowRoot.querySelectorAll('extensions-item');
+    if (!manager) return [];
+
+    const hydrateShadow = (host) => new Promise(resolve => {
+      if (host.shadowRoot) return resolve();
+      const observer = new MutationObserver(() => {
+        if (host.shadowRoot) {
+          observer.disconnect();
+          resolve();
+        }
+      });
+      observer.observe(host, { childList: true, subtree: true });
+      setTimeout(() => {
+        observer.disconnect();
+        resolve();
+      }, 3000);
+    });
+
+    await hydrateShadow(manager);
+    const itemList = manager.shadowRoot?.querySelector('extensions-item-list');
+    if (!itemList) return [];
+    await hydrateShadow(itemList);
+
+    const items = itemList.shadowRoot?.querySelectorAll('extensions-item') || [];
     const results = [];
 
     items.forEach((item) => {
@@ -34,11 +53,15 @@ async function getExtensionId(page) {
   const match = extensions.find(ext => ext.name.includes(EXTENSION_NAME));
   if (match) return match.id;
 
-  if (extensions.length > 0) {
-    return extensions[0].id;
+  if (extensions.length > 0) return extensions[0].id;
+
+  const targets = page.browser().targets();
+  const serviceWorker = targets.find(t => t.type() === 'service_worker' && t.url().startsWith('chrome-extension://'));
+  if (serviceWorker) {
+    return serviceWorker.url().split('/')[2];
   }
 
-  throw new Error(`No extensions found in chrome://extensions`);
+  throw new Error('No extensions found in chrome://extensions');
 }
 
 async function run() {
