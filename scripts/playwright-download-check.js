@@ -11,7 +11,7 @@ const TEST_URLS = {
   pexels: process.env.PEXELS_URL || 'https://www.pexels.com/photo/brown-concrete-building-20727545/',
   pixabay: process.env.PIXABAY_URL || 'https://pixabay.com/photos/bird-robin-spring-flowers-2295436/',
   coverr: process.env.COVERR_URL || 'https://coverr.co/videos/the-search-for-meaning-q9ynkrjkyr',
-  videvo: process.env.VIDEVO_URL || 'https://www.videvo.net/video/blue-sky-and-clouds/457816/'
+  freepik: process.env.FREEPIK_URL || 'https://www.freepik.com/free-photo/beautiful-shot-tree-savanna-plains-with-blue-sky_10846048.htm'
 };
 
 // Get site to test from command line argument
@@ -328,9 +328,9 @@ async function testCoverr(context, page) {
   return { ...downloadResult, extensionRegistered };
 }
 
-// =============== VIDEVO ===============
-async function testVidevo(context, page) {
-  const url = TEST_URLS.videvo;
+// =============== FREEPIK ===============
+async function testFreepik(context, page) {
+  const url = TEST_URLS.freepik;
   console.log(`\nNavigating to: ${url}`);
 
   await page.goto(url, { waitUntil: 'load', timeout: 60000 });
@@ -344,17 +344,17 @@ async function testVidevo(context, page) {
 
   let extensionRegistered = false;
   page.on('console', msg => {
-    if (msg.text().includes('Registered Videvo download')) {
+    if (msg.text().includes('Registered Freepik download')) {
       extensionRegistered = true;
     }
   });
 
-  const downloadResult = await waitForDownload(context, 'Videvo Video Download', async () => {
+  const downloadResult = await waitForDownload(context, 'Freepik Photo Download', async () => {
     await sleep(1000);
 
     let buttonClicked = false;
 
-    // Videvo has a "Download" button
+    // Freepik has a "Download" button
     const downloadSelectors = [
       'button:has-text("Download")',
       'a:has-text("Download")',
@@ -378,16 +378,16 @@ async function testVidevo(context, page) {
 
     if (!buttonClicked) {
       console.log('Button not found. Taking screenshot...');
-      await page.screenshot({ path: 'tmp/videvo-debug.png' });
+      await page.screenshot({ path: 'tmp/freepik-debug.png' });
       throw new Error('Could not find download button');
     }
 
-    // Videvo may require login or show options
+    // Freepik may require login or show options
     await sleep(1000);
 
     const optionSelectors = [
       'a[download]',
-      'a[href*=".mp4"]',
+      'a[href*=".jpg"]',
       '[class*="modal"] a:has-text("Download")'
     ];
 
@@ -479,7 +479,7 @@ async function run() {
       pexels: testPexels,
       pixabay: testPixabay,
       coverr: testCoverr,
-      videvo: testVidevo
+      freepik: testFreepik
     };
 
     if (SITE_TO_TEST === 'all') {
@@ -493,7 +493,7 @@ async function run() {
       results[SITE_TO_TEST] = await runTest(SITE_TO_TEST, tests[SITE_TO_TEST], context, page);
     } else {
       console.error(`Unknown site: ${SITE_TO_TEST}`);
-      console.log('Available sites: pexels, pixabay, coverr, videvo, all');
+      console.log('Available sites: pexels, pixabay, coverr, freepik, all');
       process.exitCode = 1;
     }
 

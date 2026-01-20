@@ -125,16 +125,19 @@ const DEFAULT_SETTINGS = {
         'videos': 'Video'
       }
     },
-    videvo: {
+    freepik: {
       enabled: true,
-      name: 'Videvo',
+      name: 'Freepik',
       categoryMap: {
         'video': 'Video',
         'videos': 'Video',
-        'motion-graphics': 'Video',
-        'sound-effects': 'SE',
-        'sfx': 'SE',
-        'music': 'BGM'
+        'photo': 'Photo',
+        'photos': 'Photo',
+        'psd': 'PSD',
+        'vector': 'Vector',
+        'vectors': 'Vector',
+        'icon': 'Icon',
+        'icons': 'Icon'
       }
     }
   }
@@ -148,7 +151,7 @@ const audiioEnabled = document.getElementById('audiioEnabled');
 const pexelsEnabled = document.getElementById('pexelsEnabled');
 const pixabayEnabled = document.getElementById('pixabayEnabled');
 const coverrEnabled = document.getElementById('coverrEnabled');
-const videvoEnabled = document.getElementById('videvoEnabled');
+const freepikEnabled = document.getElementById('freepikEnabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -312,7 +315,7 @@ function populateForm(settings) {
   pexelsEnabled.checked = settings.sites?.pexels?.enabled !== false;
   pixabayEnabled.checked = settings.sites?.pixabay?.enabled !== false;
   coverrEnabled.checked = settings.sites?.coverr?.enabled !== false;
-  videvoEnabled.checked = settings.sites?.videvo?.enabled !== false;
+  freepikEnabled.checked = settings.sites?.freepik?.enabled !== false;
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -383,11 +386,11 @@ function collectFormData() {
   }
   currentSettings.sites.coverr.enabled = coverrEnabled.checked;
 
-  // Videvo
-  if (!currentSettings.sites.videvo) {
-    currentSettings.sites.videvo = { ...DEFAULT_SETTINGS.sites.videvo };
+  // Freepik
+  if (!currentSettings.sites.freepik) {
+    currentSettings.sites.freepik = { ...DEFAULT_SETTINGS.sites.freepik };
   }
-  currentSettings.sites.videvo.enabled = videvoEnabled.checked;
+  currentSettings.sites.freepik.enabled = freepikEnabled.checked;
 
   return currentSettings;
 }

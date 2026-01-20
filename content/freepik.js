@@ -1,23 +1,29 @@
-// Content Script for Videvo
+// Content Script for Freepik
 // Extracts metadata and registers downloads
 
 (function() {
   'use strict';
 
-  const SITE_NAME = 'Videvo';
+  const SITE_NAME = 'Freepik';
 
   function extractCategory() {
     const path = window.location.pathname.toLowerCase();
-    if (path.includes('/sound-effects') || path.includes('/sfx')) {
-      return 'sound-effects';
+    if (path.includes('/video') || path.includes('/videos')) {
+      return 'video';
     }
-    if (path.includes('/music')) {
-      return 'music';
+    if (path.includes('/psd')) {
+      return 'psd';
     }
-    if (path.includes('/motion-graphics')) {
-      return 'motion-graphics';
+    if (path.includes('/vector') || path.includes('/vectors')) {
+      return 'vector';
     }
-    return 'video';
+    if (path.includes('/photo') || path.includes('/photos')) {
+      return 'photo';
+    }
+    if (path.includes('/icon') || path.includes('/icons')) {
+      return 'icon';
+    }
+    return 'photo';
   }
 
   function extractTitle() {
@@ -42,7 +48,8 @@
     const tags = [];
     const selectors = [
       '.tag',
-      'a[href*="/search/"]',
+      'a[href*="/search?"]',
+      'a[href*="/tags/"]',
       'meta[name="keywords"]'
     ];
 
@@ -78,11 +85,14 @@
   }
 
   function mapCategory(rawCategory) {
-    if (!rawCategory) return 'Video';
+    if (!rawCategory) return 'Photo';
     const category = rawCategory.toLowerCase();
-    if (category.includes('sound') || category.includes('sfx')) return 'SE';
-    if (category.includes('music')) return 'BGM';
-    return 'Video';
+    if (category.includes('video')) return 'Video';
+    if (category.includes('psd')) return 'PSD';
+    if (category.includes('vector')) return 'Vector';
+    if (category.includes('icon')) return 'Icon';
+    if (category.includes('photo') || category.includes('image')) return 'Photo';
+    return 'Photo';
   }
 
   function getPageMetadata() {
@@ -113,7 +123,7 @@
     if (!url) return false;
     const lowerUrl = url.toLowerCase();
     if (lowerUrl.includes('download')) return true;
-    const extensions = ['.mp4', '.mov', '.webm', '.mp3', '.wav', '.zip'];
+    const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.mov', '.webm', '.zip', '.psd', '.ai', '.eps', '.svg'];
     return extensions.some(ext => lowerUrl.includes(ext));
   }
 
@@ -144,7 +154,7 @@
         if (href) {
           const metadata = getPageMetadata();
           registerDownload(href, metadata);
-          console.log('[Stockpile] Registered Videvo download:', href, metadata);
+          console.log('[Stockpile] Registered Freepik download:', href, metadata);
         }
       }
     }, true);
@@ -195,7 +205,7 @@
   }
 
   function init() {
-    console.log('[Stockpile] Videvo content script loaded');
+    console.log('[Stockpile] Freepik content script loaded');
     setupDownloadInterception();
     setupMutationObserver();
     setupXHRInterception();

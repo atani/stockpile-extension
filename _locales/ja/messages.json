@@ -95,9 +95,9 @@
     "message": "動画",
     "description": "Coverr description"
   },
-  "videvoDesc": {
-    "message": "動画、効果音、音楽",
-    "description": "Videvo description"
+  "freepikDesc": {
+    "message": "写真、動画、ベクター、PSD、アイコン",
+    "description": "Freepik description"
   },
   "categoryMapping": {
     "message": "カテゴリマッピング（MotionElements）",

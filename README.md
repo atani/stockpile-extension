@@ -34,7 +34,7 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 - [Pexels](https://www.pexels.com/)
 - [Pixabay](https://pixabay.com/)
 - [Coverr](https://coverr.co/)
-- [Videvo](https://www.videvo.net/) ※Freepikに統合
+- [Freepik](https://www.freepik.com/)
 
 ## フォルダ構造
 
@@ -77,10 +77,12 @@ Downloads/
     │   └── Video/
     ├── Coverr/
     │   └── Video/
-    └── Videvo/
+    └── Freepik/
+        ├── Photo/
         ├── Video/
-        ├── SE/
-        └── BGM/
+        ├── Vector/
+        ├── PSD/
+        └── Icon/
 ```
 
 
@@ -130,7 +132,7 @@ stockpile-extension/
 │   ├── pexels.js          # Pexels 用コンテンツスクリプト
 │   ├── pixabay.js         # Pixabay 用コンテンツスクリプト
 │   ├── coverr.js          # Coverr 用コンテンツスクリプト
-│   └── videvo.js          # Videvo 用コンテンツスクリプト
+│   └── freepik.js         # Freepik 用コンテンツスクリプト
 ├── lib/
 │   ├── storage.js         # 設定管理
 │   └── database.js        # ダウンロード履歴管理

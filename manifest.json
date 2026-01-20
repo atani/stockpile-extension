@@ -27,7 +27,7 @@
     "*://*.pexels.com/*",
     "*://*.pixabay.com/*",
     "*://*.coverr.co/*",
-    "*://*.videvo.net/*",
+    "*://*.freepik.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -93,8 +93,8 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://*.videvo.net/*"],
-      "js": ["content/videvo.js"],
+      "matches": ["*://*.freepik.com/*"],
+      "js": ["content/freepik.js"],
       "run_at": "document_idle"
     }
   ],

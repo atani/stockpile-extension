@@ -95,9 +95,9 @@
     "message": "Videos",
     "description": "Coverr description"
   },
-  "videvoDesc": {
-    "message": "Videos, Sound Effects, Music",
-    "description": "Videvo description"
+  "freepikDesc": {
+    "message": "Photos, Videos, Vectors, PSDs, Icons",
+    "description": "Freepik description"
   },
   "categoryMapping": {
     "message": "Category Mapping (MotionElements)",

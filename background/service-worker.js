@@ -142,15 +142,19 @@ async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
                pageUrl.includes('coverr.co')) {
       siteName = 'Coverr';
       category = 'Video';
-    } else if (url.includes('videvo.net') || referrer.includes('videvo.net') ||
-               pageUrl.includes('videvo.net')) {
-      siteName = 'Videvo';
-      if (pageUrl.includes('/sound-effects') || pageUrl.includes('/sfx')) {
-        category = 'SE';
-      } else if (pageUrl.includes('/music')) {
-        category = 'BGM';
-      } else {
+    } else if (url.includes('freepik.com') || referrer.includes('freepik.com') ||
+               pageUrl.includes('freepik.com')) {
+      siteName = 'Freepik';
+      if (pageUrl.includes('/video') || pageUrl.includes('/videos')) {
         category = 'Video';
+      } else if (pageUrl.includes('/psd')) {
+        category = 'PSD';
+      } else if (pageUrl.includes('/vector') || pageUrl.includes('/vectors')) {
+        category = 'Vector';
+      } else if (pageUrl.includes('/icon') || pageUrl.includes('/icons')) {
+        category = 'Icon';
+      } else {
+        category = 'Photo';
       }
     }
   }
@@ -262,7 +266,7 @@ function isTargetSite(url, referrer, filename) {
     'pexels.com',
     'pixabay.com',
     'coverr.co',
-    'videvo.net'
+    'freepik.com'
   ];
 
   // Check URL
