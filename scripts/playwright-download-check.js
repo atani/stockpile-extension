@@ -8,22 +8,55 @@ const TIMEOUT = 300000;
 
 // Test URLs for each site - actual page URLs (not direct download URLs)
 const TEST_URLS = {
-  pexels: process.env.PEXELS_URL || 'https://www.pexels.com/photo/brown-concrete-building-20727545/'
+  pexels: process.env.PEXELS_URL || 'https://www.pexels.com/photo/brown-concrete-building-20727545/',
+  pixabay: process.env.PIXABAY_URL || 'https://pixabay.com/photos/bird-robin-spring-flowers-2295436/',
+  coverr: process.env.COVERR_URL || 'https://coverr.co/videos/the-search-for-meaning-q9ynkrjkyr',
+  videvo: process.env.VIDEVO_URL || 'https://www.videvo.net/video/blue-sky-and-clouds/457816/'
 };
+
+// Get site to test from command line argument
+const SITE_TO_TEST = process.argv[2] || 'all';
 
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function waitForDownload(context, label, action, page) {
+async function dismissCookieBanner(page) {
+  try {
+    const cookieSelectors = [
+      'button:has-text("Accept all")',
+      'button:has-text("Accept All")',
+      'button:has-text("Accept")',
+      'button:has-text("すべての Cookie を受け入れる")',
+      'button:has-text("Accept all cookies")',
+      'button:has-text("I agree")',
+      'button:has-text("Agree")',
+      '[data-testid="cookie-accept"]',
+      '#onetrust-accept-btn-handler',
+      '.cookie-consent-accept'
+    ];
+    for (const sel of cookieSelectors) {
+      const btn = page.locator(sel).first();
+      if (await btn.isVisible({ timeout: 2000 }).catch(() => false)) {
+        console.log('Dismissing cookie banner...');
+        await btn.click();
+        await sleep(1000);
+        return true;
+      }
+    }
+  } catch (e) {
+    // Ignore
+  }
+  return false;
+}
+
+async function waitForDownload(context, label, action) {
   console.log(`\n=== ${label} ===`);
 
-  // Start listening for download event (with shorter timeout)
   const downloadPromise = context.waitForEvent('download', { timeout: 30000 }).catch(() => null);
 
   await action();
 
-  // Check if extension registered the download by looking at console messages
   await sleep(2000);
 
   const download = await downloadPromise;
@@ -35,13 +68,11 @@ async function waitForDownload(context, label, action, page) {
     return { suggested, savedPath, downloadCaptured: true };
   }
 
-  // Download event not captured, but extension may still have worked
   console.log('Download event not captured by Playwright, checking extension logs...');
   return { suggested: null, savedPath: null, downloadCaptured: false };
 }
 
 async function getExtensionStorage(context) {
-  // Get the extension's service worker
   const workers = context.serviceWorkers();
   for (const worker of workers) {
     if (worker.url().includes('service-worker')) {
@@ -54,43 +85,20 @@ async function getExtensionStorage(context) {
   return null;
 }
 
+// =============== PEXELS ===============
 async function testPexels(context, page) {
   const url = TEST_URLS.pexels;
   console.log(`\nNavigating to: ${url}`);
 
   await page.goto(url, { waitUntil: 'load', timeout: 60000 });
-  await sleep(5000); // Wait for content script and page to fully initialize
+  await sleep(5000);
 
   console.log('Page loaded, looking for download button...');
-
-  // Debug: log page content
   const pageTitle = await page.title();
   console.log(`Page title: ${pageTitle}`);
 
-  // Dismiss cookie banner if present
-  try {
-    const cookieSelectors = [
-      'button:has-text("すべての Cookie を受け入れる")',
-      'button:has-text("Accept all cookies")',
-      'button:has-text("Accept")',
-      '[data-testid="cookie-accept"]'
-    ];
-    for (const sel of cookieSelectors) {
-      const btn = page.locator(sel).first();
-      if (await btn.isVisible({ timeout: 2000 }).catch(() => false)) {
-        console.log('Dismissing cookie banner...');
-        await btn.click();
-        await sleep(1000);
-        break;
-      }
-    }
-  } catch (e) {
-    console.log('No cookie banner or already dismissed');
-  }
+  await dismissCookieBanner(page);
 
-  // Find and click the free download button on Pexels
-  // Pexels has a "Free Download" button that opens a dropdown
-  // Track if extension registered the download
   let extensionRegistered = false;
   page.on('console', msg => {
     if (msg.text().includes('Registered Pexels download')) {
@@ -99,22 +107,8 @@ async function testPexels(context, page) {
   });
 
   const downloadResult = await waitForDownload(context, 'Pexels Photo Download', async () => {
-    // Wait for button to be visible
     await sleep(1000);
 
-    // Close language selector if present
-    try {
-      const langClose = page.locator('button:near(:text("Choose your language"))').first();
-      if (await langClose.isVisible({ timeout: 1000 }).catch(() => false)) {
-        const closeBtn = page.locator('[aria-label="Close"]').first();
-        if (await closeBtn.isVisible({ timeout: 500 }).catch(() => false)) {
-          await closeBtn.click();
-          await sleep(500);
-        }
-      }
-    } catch (e) {}
-
-    // Use getByRole or getByText for more reliable selection
     let buttonClicked = false;
 
     // Try getByRole first
@@ -128,7 +122,6 @@ async function testPexels(context, page) {
       }
     } catch (e) {}
 
-    // Try link with "Free download" text
     if (!buttonClicked) {
       try {
         const downloadLink = page.getByRole('link', { name: /free download/i });
@@ -141,94 +134,322 @@ async function testPexels(context, page) {
       } catch (e) {}
     }
 
-    // Fallback: try CSS selectors
     if (!buttonClicked) {
-      const downloadSelectors = [
-        'a[class*="DownloadButton"]',
-        'button[class*="DownloadButton"]',
-        'a[href*="download"]',
-        '[data-testid*="download"]'
-      ];
-
-      for (const selector of downloadSelectors) {
-        try {
-          const button = page.locator(selector).first();
-          const isVisible = await button.isVisible({ timeout: 1000 }).catch(() => false);
-          if (isVisible) {
-            console.log(`Found download button with selector: ${selector}`);
-            await button.click();
-            buttonClicked = true;
-            await sleep(1000);
-            break;
-          }
-        } catch (e) {
-          // Continue to next selector
-        }
-      }
-    }
-
-    if (!buttonClicked) {
-      // Take screenshot for debugging
       console.log('Button not found. Taking screenshot...');
       await page.screenshot({ path: 'tmp/pexels-debug.png' });
-
-      // Debug: print all buttons and links on page
-      const buttons = await page.locator('button, a').allTextContents();
-      console.log('Available buttons/links:', buttons.filter(t => t.toLowerCase().includes('download')));
-
       throw new Error('Could not find download button');
     }
 
-    // Pexels shows a dropdown menu after clicking
-    // Look for the actual download link in dropdown
     await sleep(500);
 
     const dropdownSelectors = [
       'a:has-text("Original")',
-      'a:has-text("オリジナル")',
       'a[download]',
-      'a[href*="dl="]',
-      '[role="menu"] a',
-      '[class*="dropdown"] a'
+      'a[href*="dl="]'
     ];
 
     for (const dropdownSelector of dropdownSelectors) {
       try {
         const link = page.locator(dropdownSelector).first();
-        const isVisible = await link.isVisible({ timeout: 1000 }).catch(() => false);
-        if (isVisible) {
+        if (await link.isVisible({ timeout: 1000 }).catch(() => false)) {
           console.log(`Found dropdown link with selector: ${dropdownSelector}`);
           await link.click();
           return;
         }
-      } catch (e) {
-        // Continue to next selector
-      }
+      } catch (e) {}
     }
 
-    // If no dropdown, the first click might have triggered download directly
     console.log('No dropdown found, assuming direct download triggered');
   });
 
-  // Return result with extension registration status
   return { ...downloadResult, extensionRegistered };
 }
 
-async function checkDownloadPath(savedPath, expectedFolder) {
-  // Check if the file was saved to the expected Stockpile folder
-  const normalizedPath = savedPath.replace(/\\/g, '/');
-  const containsExpected = normalizedPath.includes(expectedFolder);
-  console.log(`\nPath check:`);
-  console.log(`  Saved to: ${savedPath}`);
-  console.log(`  Expected folder: ${expectedFolder}`);
-  console.log(`  Match: ${containsExpected ? 'YES' : 'NO'}`);
-  return containsExpected;
+// =============== PIXABAY ===============
+async function testPixabay(context, page) {
+  const url = TEST_URLS.pixabay;
+  console.log(`\nNavigating to: ${url}`);
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded, looking for download button...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+
+  await dismissCookieBanner(page);
+
+  let extensionRegistered = false;
+  page.on('console', msg => {
+    if (msg.text().includes('Registered Pixabay download')) {
+      extensionRegistered = true;
+    }
+  });
+
+  const downloadResult = await waitForDownload(context, 'Pixabay Photo Download', async () => {
+    await sleep(1000);
+
+    let buttonClicked = false;
+
+    // Pixabay has a green "Download" button
+    const downloadSelectors = [
+      'button:has-text("Download")',
+      'a:has-text("Download")',
+      'button:has-text("Free Download")',
+      '[class*="download" i]',
+      '[data-download]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          buttonClicked = true;
+          await sleep(1000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    if (!buttonClicked) {
+      console.log('Button not found. Taking screenshot...');
+      await page.screenshot({ path: 'tmp/pixabay-debug.png' });
+      throw new Error('Could not find download button');
+    }
+
+    // Pixabay shows a modal with size options
+    await sleep(1000);
+
+    const sizeSelectors = [
+      'a:has-text("1920")',
+      'a:has-text("1280")',
+      'a[download]',
+      '[class*="modal"] a:has-text("Download")',
+      'button:has-text("Download")'
+    ];
+
+    for (const sizeSelector of sizeSelectors) {
+      try {
+        const link = page.locator(sizeSelector).first();
+        if (await link.isVisible({ timeout: 1000 }).catch(() => false)) {
+          console.log(`Found size option with selector: ${sizeSelector}`);
+          await link.click();
+          return;
+        }
+      } catch (e) {}
+    }
+
+    console.log('No size selector found, assuming direct download triggered');
+  });
+
+  return { ...downloadResult, extensionRegistered };
+}
+
+// =============== COVERR ===============
+async function testCoverr(context, page) {
+  const url = TEST_URLS.coverr;
+  console.log(`\nNavigating to: ${url}`);
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded, looking for download button...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+
+  await dismissCookieBanner(page);
+
+  let extensionRegistered = false;
+  page.on('console', msg => {
+    if (msg.text().includes('Registered Coverr download')) {
+      extensionRegistered = true;
+    }
+  });
+
+  const downloadResult = await waitForDownload(context, 'Coverr Video Download', async () => {
+    await sleep(1000);
+
+    let buttonClicked = false;
+
+    // Coverr has a "Download" button
+    const downloadSelectors = [
+      'button:has-text("Download")',
+      'a:has-text("Download")',
+      'button:has-text("Free Download")',
+      '[class*="download" i]',
+      '[aria-label*="download" i]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          buttonClicked = true;
+          await sleep(1000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    if (!buttonClicked) {
+      console.log('Button not found. Taking screenshot...');
+      await page.screenshot({ path: 'tmp/coverr-debug.png' });
+      throw new Error('Could not find download button');
+    }
+
+    // Coverr may show quality options
+    await sleep(1000);
+
+    const qualitySelectors = [
+      'a:has-text("1080")',
+      'a:has-text("720")',
+      'a[download]',
+      '[class*="modal"] a'
+    ];
+
+    for (const qualitySelector of qualitySelectors) {
+      try {
+        const link = page.locator(qualitySelector).first();
+        if (await link.isVisible({ timeout: 1000 }).catch(() => false)) {
+          console.log(`Found quality option with selector: ${qualitySelector}`);
+          await link.click();
+          return;
+        }
+      } catch (e) {}
+    }
+
+    console.log('No quality selector found, assuming direct download triggered');
+  });
+
+  return { ...downloadResult, extensionRegistered };
+}
+
+// =============== VIDEVO ===============
+async function testVidevo(context, page) {
+  const url = TEST_URLS.videvo;
+  console.log(`\nNavigating to: ${url}`);
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded, looking for download button...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+
+  await dismissCookieBanner(page);
+
+  let extensionRegistered = false;
+  page.on('console', msg => {
+    if (msg.text().includes('Registered Videvo download')) {
+      extensionRegistered = true;
+    }
+  });
+
+  const downloadResult = await waitForDownload(context, 'Videvo Video Download', async () => {
+    await sleep(1000);
+
+    let buttonClicked = false;
+
+    // Videvo has a "Download" button
+    const downloadSelectors = [
+      'button:has-text("Download")',
+      'a:has-text("Download")',
+      'button:has-text("Free Download")',
+      '[class*="download" i]',
+      '[aria-label*="download" i]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          buttonClicked = true;
+          await sleep(1000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    if (!buttonClicked) {
+      console.log('Button not found. Taking screenshot...');
+      await page.screenshot({ path: 'tmp/videvo-debug.png' });
+      throw new Error('Could not find download button');
+    }
+
+    // Videvo may require login or show options
+    await sleep(1000);
+
+    const optionSelectors = [
+      'a[download]',
+      'a[href*=".mp4"]',
+      '[class*="modal"] a:has-text("Download")'
+    ];
+
+    for (const optionSelector of optionSelectors) {
+      try {
+        const link = page.locator(optionSelector).first();
+        if (await link.isVisible({ timeout: 1000 }).catch(() => false)) {
+          console.log(`Found option with selector: ${optionSelector}`);
+          await link.click();
+          return;
+        }
+      } catch (e) {}
+    }
+
+    console.log('No option found, assuming direct download triggered');
+  });
+
+  return { ...downloadResult, extensionRegistered };
+}
+
+// =============== MAIN ===============
+async function runTest(siteName, testFn, context, page) {
+  console.log(`\n${'='.repeat(50)}`);
+  console.log(`Testing: ${siteName.toUpperCase()}`);
+  console.log('='.repeat(50));
+
+  try {
+    const result = await testFn(context, page);
+
+    await sleep(2000);
+
+    const storage = await getExtensionStorage(context);
+    if (storage && storage.pendingDownloads) {
+      const keys = Object.keys(storage.pendingDownloads);
+      if (keys.length > 0) {
+        console.log('\n=== Extension Storage (pendingDownloads) ===');
+        console.log(JSON.stringify(storage.pendingDownloads, null, 2));
+      }
+    }
+
+    console.log(`\n=== ${siteName} Test Result ===`);
+    console.log('Extension registered download:', result.extensionRegistered ? 'YES' : 'NO');
+    console.log('Playwright captured download:', result.downloadCaptured ? 'YES' : 'NO');
+
+    if (result.extensionRegistered) {
+      console.log(`\n✓ ${siteName} TEST PASSED`);
+      return true;
+    } else {
+      console.log(`\n✗ ${siteName} TEST FAILED: Extension did not register the download`);
+      return false;
+    }
+  } catch (err) {
+    console.error(`\n✗ ${siteName} TEST ERROR:`, err.message);
+    return false;
+  }
 }
 
 async function run() {
   console.log('Starting Stockpile extension test...');
   console.log(`Extension path: ${EXTENSION_PATH}`);
   console.log(`Downloads path: ${DOWNLOADS_PATH}`);
+  console.log(`Site to test: ${SITE_TO_TEST}`);
 
   const context = await chromium.launchPersistentContext('', {
     headless: false,
@@ -243,42 +464,51 @@ async function run() {
   const page = await context.newPage();
   page.setDefaultTimeout(TIMEOUT);
 
-  // Listen for console messages from content scripts
   page.on('console', msg => {
     if (msg.text().includes('Stockpile')) {
       console.log(`[Page Console] ${msg.text()}`);
     }
   });
 
+  const results = {};
+
   try {
-    // Wait a bit for extension to initialize
     await sleep(1000);
 
-    // Test Pexels
-    const result = await testPexels(context, page);
+    const tests = {
+      pexels: testPexels,
+      pixabay: testPixabay,
+      coverr: testCoverr,
+      videvo: testVidevo
+    };
 
-    // Give extension time to process
-    await sleep(2000);
-
-    // Check extension storage for recorded download
-    const storage = await getExtensionStorage(context);
-    if (storage) {
-      console.log('\n=== Extension Storage ===');
-      console.log(JSON.stringify(storage, null, 2));
-    }
-
-    console.log('\n=== Test Complete ===');
-    console.log('Extension registered download:', result.extensionRegistered ? 'YES' : 'NO');
-    console.log('Playwright captured download:', result.downloadCaptured ? 'YES' : 'NO');
-    if (result.suggested) {
-      console.log('Download filename:', result.suggested);
-    }
-
-    // Test passes if extension registered the download
-    if (result.extensionRegistered) {
-      console.log('\n✓ TEST PASSED: Extension correctly detected and registered the download');
+    if (SITE_TO_TEST === 'all') {
+      for (const [name, fn] of Object.entries(tests)) {
+        results[name] = await runTest(name, fn, context, page);
+        // Navigate away between tests to reset state
+        await page.goto('about:blank');
+        await sleep(1000);
+      }
+    } else if (tests[SITE_TO_TEST]) {
+      results[SITE_TO_TEST] = await runTest(SITE_TO_TEST, tests[SITE_TO_TEST], context, page);
     } else {
-      console.log('\n✗ TEST FAILED: Extension did not register the download');
+      console.error(`Unknown site: ${SITE_TO_TEST}`);
+      console.log('Available sites: pexels, pixabay, coverr, videvo, all');
+      process.exitCode = 1;
+    }
+
+    // Summary
+    console.log('\n' + '='.repeat(50));
+    console.log('TEST SUMMARY');
+    console.log('='.repeat(50));
+
+    let allPassed = true;
+    for (const [name, passed] of Object.entries(results)) {
+      console.log(`${passed ? '✓' : '✗'} ${name}: ${passed ? 'PASSED' : 'FAILED'}`);
+      if (!passed) allPassed = false;
+    }
+
+    if (!allPassed) {
       process.exitCode = 1;
     }
 
@@ -290,7 +520,7 @@ async function run() {
 run()
   .then(() => {
     console.log('\nAll done.');
-    process.exit(0);
+    process.exit(process.exitCode || 0);
   })
   .catch((err) => {
     console.error(err);
