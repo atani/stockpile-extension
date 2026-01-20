@@ -37,7 +37,6 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 - [Freepik](https://www.freepik.com/)
 - [FootageCrate](https://footagecrate.com/)
 - [Pond5](https://www.pond5.com/)
-- [Life of Vids](https://lifeofvids.com/)
 
 ## フォルダ構造
 
@@ -91,14 +90,12 @@ Downloads/
     │   ├── VFX/
     │   ├── SE/
     │   └── BGM/
-    ├── Pond5/
-    │   ├── Video/
-    │   ├── BGM/
-    │   ├── SE/
-    │   ├── Photo/
-    │   └── AE_Template/
-    └── LifeOfVids/
-        └── Video/
+    └── Pond5/
+        ├── Video/
+        ├── BGM/
+        ├── SE/
+        ├── Photo/
+        └── AE_Template/
 ```
 
 
@@ -150,8 +147,7 @@ stockpile-extension/
 │   ├── coverr.js          # Coverr 用コンテンツスクリプト
 │   ├── freepik.js         # Freepik 用コンテンツスクリプト
 │   ├── footagecrate.js    # FootageCrate 用コンテンツスクリプト
-│   ├── pond5.js           # Pond5 用コンテンツスクリプト
-│   └── lifeofvids.js      # Life of Vids 用コンテンツスクリプト
+│   └── pond5.js           # Pond5 用コンテンツスクリプト
 ├── lib/
 │   ├── storage.js         # 設定管理
 │   └── database.js        # ダウンロード履歴管理

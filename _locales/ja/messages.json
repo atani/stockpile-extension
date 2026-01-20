@@ -107,10 +107,6 @@
     "message": "動画、音楽、効果音、写真、テンプレート",
     "description": "Pond5 description"
   },
-  "lifeofvidsDesc": {
-    "message": "動画",
-    "description": "Life of Vids description"
-  },
   "categoryMapping": {
     "message": "カテゴリマッピング（MotionElements）",
     "description": "Category mapping section"

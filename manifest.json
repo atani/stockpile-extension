@@ -30,7 +30,6 @@
     "*://*.freepik.com/*",
     "*://*.footagecrate.com/*",
     "*://*.pond5.com/*",
-    "*://*.lifeofvids.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -108,11 +107,6 @@
     {
       "matches": ["*://*.pond5.com/*"],
       "js": ["content/pond5.js"],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": ["*://*.lifeofvids.com/*"],
-      "js": ["content/lifeofvids.js"],
       "run_at": "document_idle"
     }
   ],

@@ -13,8 +13,7 @@ const TEST_URLS = {
   coverr: process.env.COVERR_URL || 'https://coverr.co/videos/a-man-walks-into-a-street-and-looks-around-confidently-z1qh1im2yq',
   freepik: process.env.FREEPIK_URL || 'https://www.freepik.com/free-photo/pathway-middle-green-leafed-trees-with-sun-shining-through-branches_8281186.htm',
   footagecrate: process.env.FOOTAGECRATE_URL || 'https://footagecrate.com/free-video-footage/smoke-rising-1.html',
-  pond5: process.env.POND5_URL || 'https://www.pond5.com/stock-footage/item/155638958-aerial-view-mountains-northern-vietnam',
-  lifeofvids: process.env.LIFEOFVIDS_URL || 'https://lifeofvids.com/'
+  pond5: process.env.POND5_URL || 'https://www.pond5.com/stock-footage/item/155638958-aerial-view-mountains-northern-vietnam'
 };
 
 // Get site to test from command line argument
@@ -553,61 +552,6 @@ async function testPond5(context, page) {
   return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
 }
 
-// =============== LIFEOFVIDS ===============
-async function testLifeOfVids(context, page) {
-  const url = TEST_URLS.lifeofvids;
-  console.log(`\nNavigating to: ${url}`);
-
-  let extensionRegistered = false;
-  let contentScriptLoaded = false;
-
-  page.on('console', msg => {
-    const text = msg.text();
-    if (text.includes('Registered LifeOfVids download')) {
-      extensionRegistered = true;
-    }
-    if (text.includes('LifeOfVids content script loaded')) {
-      contentScriptLoaded = true;
-    }
-  });
-
-  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
-  await sleep(5000);
-
-  console.log('Page loaded...');
-  const pageTitle = await page.title();
-  console.log(`Page title: ${pageTitle}`);
-  console.log(`Content script loaded: ${contentScriptLoaded}`);
-
-  await dismissCookieBanner(page);
-
-  const downloadResult = await waitForDownload(context, 'LifeOfVids Download', async () => {
-    await sleep(1000);
-
-    // LifeOfVids homepage - just verify content script loads
-    const downloadSelectors = [
-      'a:has-text("Download")',
-      '[class*="download" i]'
-    ];
-
-    for (const selector of downloadSelectors) {
-      try {
-        const button = page.locator(selector).first();
-        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
-          console.log(`Found download button with selector: ${selector}`);
-          await button.click();
-          await sleep(2000);
-          break;
-        }
-      } catch (e) {}
-    }
-
-    console.log('LifeOfVids test - content script load verification');
-  });
-
-  return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
-}
-
 // =============== MAIN ===============
 async function runTest(siteName, testFn, context, page) {
   console.log(`\n${'='.repeat(50)}`);
@@ -681,8 +625,7 @@ async function run() {
       coverr: testCoverr,
       freepik: testFreepik,
       footagecrate: testFootageCrate,
-      pond5: testPond5,
-      lifeofvids: testLifeOfVids
+      pond5: testPond5
     };
 
     if (SITE_TO_TEST === 'all') {

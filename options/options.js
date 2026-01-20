@@ -161,13 +161,6 @@ const DEFAULT_SETTINGS = {
         'photo': 'Photo',
         'ae': 'AE_Template'
       }
-    },
-    lifeofvids: {
-      enabled: true,
-      name: 'LifeOfVids',
-      categoryMap: {
-        'video': 'Video'
-      }
     }
   }
 };
@@ -183,7 +176,6 @@ const coverrEnabled = document.getElementById('coverrEnabled');
 const freepikEnabled = document.getElementById('freepikEnabled');
 const footagecrateEnabled = document.getElementById('footagecrateEnabled');
 const pond5Enabled = document.getElementById('pond5Enabled');
-const lifeofvidsEnabled = document.getElementById('lifeofvidsEnabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -350,7 +342,6 @@ function populateForm(settings) {
   freepikEnabled.checked = settings.sites?.freepik?.enabled !== false;
   footagecrateEnabled.checked = settings.sites?.footagecrate?.enabled !== false;
   pond5Enabled.checked = settings.sites?.pond5?.enabled !== false;
-  lifeofvidsEnabled.checked = settings.sites?.lifeofvids?.enabled !== false;
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -438,12 +429,6 @@ function collectFormData() {
     currentSettings.sites.pond5 = { ...DEFAULT_SETTINGS.sites.pond5 };
   }
   currentSettings.sites.pond5.enabled = pond5Enabled.checked;
-
-  // LifeOfVids
-  if (!currentSettings.sites.lifeofvids) {
-    currentSettings.sites.lifeofvids = { ...DEFAULT_SETTINGS.sites.lifeofvids };
-  }
-  currentSettings.sites.lifeofvids.enabled = lifeofvidsEnabled.checked;
 
   return currentSettings;
 }

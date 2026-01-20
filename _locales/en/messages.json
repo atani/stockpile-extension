@@ -107,10 +107,6 @@
     "message": "Videos, Music, Sound Effects, Photos, Templates",
     "description": "Pond5 description"
   },
-  "lifeofvidsDesc": {
-    "message": "Videos",
-    "description": "Life of Vids description"
-  },
   "categoryMapping": {
     "message": "Category Mapping (MotionElements)",
     "description": "Category mapping section"
