@@ -139,6 +139,42 @@ const DEFAULT_SETTINGS = {
         'icon': 'Icon',
         'icons': 'Icon'
       }
+    },
+    footagecrate: {
+      enabled: true,
+      name: 'FootageCrate',
+      categoryMap: {
+        'video': 'Video',
+        'vfx': 'VFX',
+        'sfx': 'SE',
+        'music': 'BGM'
+      }
+    },
+    pond5: {
+      enabled: true,
+      name: 'Pond5',
+      categoryMap: {
+        'video': 'Video',
+        'footage': 'Video',
+        'music': 'BGM',
+        'sfx': 'SE',
+        'photo': 'Photo',
+        'ae': 'AE_Template'
+      }
+    },
+    lifeofvids: {
+      enabled: true,
+      name: 'LifeOfVids',
+      categoryMap: {
+        'video': 'Video'
+      }
+    },
+    mazwai: {
+      enabled: true,
+      name: 'Mazwai',
+      categoryMap: {
+        'video': 'Video'
+      }
     }
   }
 };
@@ -152,6 +188,10 @@ const pexelsEnabled = document.getElementById('pexelsEnabled');
 const pixabayEnabled = document.getElementById('pixabayEnabled');
 const coverrEnabled = document.getElementById('coverrEnabled');
 const freepikEnabled = document.getElementById('freepikEnabled');
+const footagecrateEnabled = document.getElementById('footagecrateEnabled');
+const pond5Enabled = document.getElementById('pond5Enabled');
+const lifeofvidsEnabled = document.getElementById('lifeofvidsEnabled');
+const mazwaiEnabled = document.getElementById('mazwaiEnabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -316,6 +356,10 @@ function populateForm(settings) {
   pixabayEnabled.checked = settings.sites?.pixabay?.enabled !== false;
   coverrEnabled.checked = settings.sites?.coverr?.enabled !== false;
   freepikEnabled.checked = settings.sites?.freepik?.enabled !== false;
+  footagecrateEnabled.checked = settings.sites?.footagecrate?.enabled !== false;
+  pond5Enabled.checked = settings.sites?.pond5?.enabled !== false;
+  lifeofvidsEnabled.checked = settings.sites?.lifeofvids?.enabled !== false;
+  mazwaiEnabled.checked = settings.sites?.mazwai?.enabled !== false;
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -391,6 +435,30 @@ function collectFormData() {
     currentSettings.sites.freepik = { ...DEFAULT_SETTINGS.sites.freepik };
   }
   currentSettings.sites.freepik.enabled = freepikEnabled.checked;
+
+  // FootageCrate
+  if (!currentSettings.sites.footagecrate) {
+    currentSettings.sites.footagecrate = { ...DEFAULT_SETTINGS.sites.footagecrate };
+  }
+  currentSettings.sites.footagecrate.enabled = footagecrateEnabled.checked;
+
+  // Pond5
+  if (!currentSettings.sites.pond5) {
+    currentSettings.sites.pond5 = { ...DEFAULT_SETTINGS.sites.pond5 };
+  }
+  currentSettings.sites.pond5.enabled = pond5Enabled.checked;
+
+  // LifeOfVids
+  if (!currentSettings.sites.lifeofvids) {
+    currentSettings.sites.lifeofvids = { ...DEFAULT_SETTINGS.sites.lifeofvids };
+  }
+  currentSettings.sites.lifeofvids.enabled = lifeofvidsEnabled.checked;
+
+  // Mazwai
+  if (!currentSettings.sites.mazwai) {
+    currentSettings.sites.mazwai = { ...DEFAULT_SETTINGS.sites.mazwai };
+  }
+  currentSettings.sites.mazwai.enabled = mazwaiEnabled.checked;
 
   return currentSettings;
 }

@@ -28,6 +28,10 @@
     "*://*.pixabay.com/*",
     "*://*.coverr.co/*",
     "*://*.freepik.com/*",
+    "*://*.footagecrate.com/*",
+    "*://*.pond5.com/*",
+    "*://*.lifeofvids.com/*",
+    "*://*.mazwai.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -95,6 +99,26 @@
     {
       "matches": ["*://*.freepik.com/*"],
       "js": ["content/freepik.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.footagecrate.com/*"],
+      "js": ["content/footagecrate.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.pond5.com/*"],
+      "js": ["content/pond5.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.lifeofvids.com/*"],
+      "js": ["content/lifeofvids.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.mazwai.com/*"],
+      "js": ["content/mazwai.js"],
       "run_at": "document_idle"
     }
   ],

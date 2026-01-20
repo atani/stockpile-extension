@@ -99,6 +99,22 @@
     "message": "写真、動画、ベクター、PSD、アイコン",
     "description": "Freepik description"
   },
+  "footagecrateDesc": {
+    "message": "動画、VFX、効果音、音楽",
+    "description": "FootageCrate description"
+  },
+  "pond5Desc": {
+    "message": "動画、音楽、効果音、写真、テンプレート",
+    "description": "Pond5 description"
+  },
+  "lifeofvidsDesc": {
+    "message": "動画",
+    "description": "Life of Vids description"
+  },
+  "mazwaiDesc": {
+    "message": "動画",
+    "description": "Mazwai description"
+  },
   "categoryMapping": {
     "message": "カテゴリマッピング（MotionElements）",
     "description": "Category mapping section"
