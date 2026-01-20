@@ -38,7 +38,6 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 - [FootageCrate](https://footagecrate.com/)
 - [Pond5](https://www.pond5.com/)
 - [Life of Vids](https://lifeofvids.com/)
-- [Mazwai](https://mazwai.com/)
 
 ## フォルダ構造
 
@@ -98,9 +97,7 @@ Downloads/
     │   ├── SE/
     │   ├── Photo/
     │   └── AE_Template/
-    ├── LifeOfVids/
-    │   └── Video/
-    └── Mazwai/
+    └── LifeOfVids/
         └── Video/
 ```
 
@@ -154,8 +151,7 @@ stockpile-extension/
 │   ├── freepik.js         # Freepik 用コンテンツスクリプト
 │   ├── footagecrate.js    # FootageCrate 用コンテンツスクリプト
 │   ├── pond5.js           # Pond5 用コンテンツスクリプト
-│   ├── lifeofvids.js      # Life of Vids 用コンテンツスクリプト
-│   └── mazwai.js          # Mazwai 用コンテンツスクリプト
+│   └── lifeofvids.js      # Life of Vids 用コンテンツスクリプト
 ├── lib/
 │   ├── storage.js         # 設定管理
 │   └── database.js        # ダウンロード履歴管理

@@ -168,13 +168,6 @@ const DEFAULT_SETTINGS = {
       categoryMap: {
         'video': 'Video'
       }
-    },
-    mazwai: {
-      enabled: true,
-      name: 'Mazwai',
-      categoryMap: {
-        'video': 'Video'
-      }
     }
   }
 };
@@ -191,7 +184,6 @@ const freepikEnabled = document.getElementById('freepikEnabled');
 const footagecrateEnabled = document.getElementById('footagecrateEnabled');
 const pond5Enabled = document.getElementById('pond5Enabled');
 const lifeofvidsEnabled = document.getElementById('lifeofvidsEnabled');
-const mazwaiEnabled = document.getElementById('mazwaiEnabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -359,7 +351,6 @@ function populateForm(settings) {
   footagecrateEnabled.checked = settings.sites?.footagecrate?.enabled !== false;
   pond5Enabled.checked = settings.sites?.pond5?.enabled !== false;
   lifeofvidsEnabled.checked = settings.sites?.lifeofvids?.enabled !== false;
-  mazwaiEnabled.checked = settings.sites?.mazwai?.enabled !== false;
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -453,12 +444,6 @@ function collectFormData() {
     currentSettings.sites.lifeofvids = { ...DEFAULT_SETTINGS.sites.lifeofvids };
   }
   currentSettings.sites.lifeofvids.enabled = lifeofvidsEnabled.checked;
-
-  // Mazwai
-  if (!currentSettings.sites.mazwai) {
-    currentSettings.sites.mazwai = { ...DEFAULT_SETTINGS.sites.mazwai };
-  }
-  currentSettings.sites.mazwai.enabled = mazwaiEnabled.checked;
 
   return currentSettings;
 }

@@ -111,10 +111,6 @@
     "message": "Videos",
     "description": "Life of Vids description"
   },
-  "mazwaiDesc": {
-    "message": "Videos",
-    "description": "Mazwai description"
-  },
   "categoryMapping": {
     "message": "Category Mapping (MotionElements)",
     "description": "Category mapping section"
