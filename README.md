@@ -36,6 +36,13 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 - [Coverr](https://coverr.co/)
 - [Freepik](https://www.freepik.com/)
 
+### 対応予定サイト
+
+- [ ] [FootageCrate](https://footagecrate.com/)
+- [ ] [Pond5](https://www.pond5.com/)
+- [ ] [Life of Vids](https://lifeofvids.com/)
+- [ ] [Mazwai](https://mazwai.com/)
+
 ## フォルダ構造
 
 ダウンロードしたファイルは以下の構造で保存されます:
