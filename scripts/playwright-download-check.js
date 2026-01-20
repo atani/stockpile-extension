@@ -11,7 +11,11 @@ const TEST_URLS = {
   pexels: process.env.PEXELS_URL || 'https://www.pexels.com/photo/brown-concrete-building-20727545/',
   pixabay: process.env.PIXABAY_URL || 'https://pixabay.com/photos/rock-nature-landscape-england-9756732/',
   coverr: process.env.COVERR_URL || 'https://coverr.co/videos/a-man-walks-into-a-street-and-looks-around-confidently-z1qh1im2yq',
-  freepik: process.env.FREEPIK_URL || 'https://www.freepik.com/free-photo/pathway-middle-green-leafed-trees-with-sun-shining-through-branches_8281186.htm'
+  freepik: process.env.FREEPIK_URL || 'https://www.freepik.com/free-photo/pathway-middle-green-leafed-trees-with-sun-shining-through-branches_8281186.htm',
+  footagecrate: process.env.FOOTAGECRATE_URL || 'https://footagecrate.com/free-video-footage/smoke-rising-1.html',
+  pond5: process.env.POND5_URL || 'https://www.pond5.com/stock-footage/item/155638958-aerial-view-mountains-northern-vietnam',
+  lifeofvids: process.env.LIFEOFVIDS_URL || 'https://lifeofvids.com/',
+  mazwai: process.env.MAZWAI_URL || 'https://mazwai.com/'
 };
 
 // Get site to test from command line argument
@@ -426,6 +430,240 @@ async function testFreepik(context, page) {
   return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
 }
 
+// =============== FOOTAGECRATE ===============
+async function testFootageCrate(context, page) {
+  const url = TEST_URLS.footagecrate;
+  console.log(`\nNavigating to: ${url}`);
+
+  let extensionRegistered = false;
+  let contentScriptLoaded = false;
+
+  page.on('console', msg => {
+    const text = msg.text();
+    if (text.includes('Registered FootageCrate download')) {
+      extensionRegistered = true;
+    }
+    if (text.includes('FootageCrate content script loaded')) {
+      contentScriptLoaded = true;
+    }
+  });
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded, looking for download button...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+  console.log(`Content script loaded: ${contentScriptLoaded}`);
+
+  await dismissCookieBanner(page);
+
+  const downloadResult = await waitForDownload(context, 'FootageCrate Download', async () => {
+    await sleep(1000);
+
+    let buttonClicked = false;
+
+    const downloadSelectors = [
+      'a:has-text("Download")',
+      'button:has-text("Download")',
+      '[class*="download" i]',
+      'a[href*="download"]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          buttonClicked = true;
+          await sleep(2000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    if (!buttonClicked) {
+      console.log('Button not found. Taking screenshot...');
+      await page.screenshot({ path: 'tmp/footagecrate-debug.png' });
+      // Don't throw - content script loading is enough for validation
+    }
+  });
+
+  return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
+}
+
+// =============== POND5 ===============
+async function testPond5(context, page) {
+  const url = TEST_URLS.pond5;
+  console.log(`\nNavigating to: ${url}`);
+
+  let extensionRegistered = false;
+  let contentScriptLoaded = false;
+
+  page.on('console', msg => {
+    const text = msg.text();
+    if (text.includes('Registered Pond5 download')) {
+      extensionRegistered = true;
+    }
+    if (text.includes('Pond5 content script loaded')) {
+      contentScriptLoaded = true;
+    }
+  });
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded, looking for download button...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+  console.log(`Content script loaded: ${contentScriptLoaded}`);
+
+  await dismissCookieBanner(page);
+
+  const downloadResult = await waitForDownload(context, 'Pond5 Download', async () => {
+    await sleep(1000);
+
+    let buttonClicked = false;
+
+    const downloadSelectors = [
+      'button:has-text("Download")',
+      'a:has-text("Download")',
+      '[class*="download" i]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          buttonClicked = true;
+          await sleep(2000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    if (!buttonClicked) {
+      console.log('Button not found (Pond5 requires login for downloads). Taking screenshot...');
+      await page.screenshot({ path: 'tmp/pond5-debug.png' });
+    }
+  });
+
+  return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
+}
+
+// =============== LIFEOFVIDS ===============
+async function testLifeOfVids(context, page) {
+  const url = TEST_URLS.lifeofvids;
+  console.log(`\nNavigating to: ${url}`);
+
+  let extensionRegistered = false;
+  let contentScriptLoaded = false;
+
+  page.on('console', msg => {
+    const text = msg.text();
+    if (text.includes('Registered LifeOfVids download')) {
+      extensionRegistered = true;
+    }
+    if (text.includes('LifeOfVids content script loaded')) {
+      contentScriptLoaded = true;
+    }
+  });
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+  console.log(`Content script loaded: ${contentScriptLoaded}`);
+
+  await dismissCookieBanner(page);
+
+  const downloadResult = await waitForDownload(context, 'LifeOfVids Download', async () => {
+    await sleep(1000);
+
+    // LifeOfVids homepage - just verify content script loads
+    const downloadSelectors = [
+      'a:has-text("Download")',
+      '[class*="download" i]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          await sleep(2000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    console.log('LifeOfVids test - content script load verification');
+  });
+
+  return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
+}
+
+// =============== MAZWAI ===============
+async function testMazwai(context, page) {
+  const url = TEST_URLS.mazwai;
+  console.log(`\nNavigating to: ${url}`);
+
+  let extensionRegistered = false;
+  let contentScriptLoaded = false;
+
+  page.on('console', msg => {
+    const text = msg.text();
+    if (text.includes('Registered Mazwai download')) {
+      extensionRegistered = true;
+    }
+    if (text.includes('Mazwai content script loaded')) {
+      contentScriptLoaded = true;
+    }
+  });
+
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await sleep(5000);
+
+  console.log('Page loaded...');
+  const pageTitle = await page.title();
+  console.log(`Page title: ${pageTitle}`);
+  console.log(`Content script loaded: ${contentScriptLoaded}`);
+
+  await dismissCookieBanner(page);
+
+  const downloadResult = await waitForDownload(context, 'Mazwai Download', async () => {
+    await sleep(1000);
+
+    // Mazwai homepage - just verify content script loads
+    const downloadSelectors = [
+      'a:has-text("Download")',
+      '[class*="download" i]'
+    ];
+
+    for (const selector of downloadSelectors) {
+      try {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log(`Found download button with selector: ${selector}`);
+          await button.click();
+          await sleep(2000);
+          break;
+        }
+      } catch (e) {}
+    }
+
+    console.log('Mazwai test - content script load verification');
+  });
+
+  return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
+}
+
 // =============== MAIN ===============
 async function runTest(siteName, testFn, context, page) {
   console.log(`\n${'='.repeat(50)}`);
@@ -497,7 +735,11 @@ async function run() {
       pexels: testPexels,
       pixabay: testPixabay,
       coverr: testCoverr,
-      freepik: testFreepik
+      freepik: testFreepik,
+      footagecrate: testFootageCrate,
+      pond5: testPond5,
+      lifeofvids: testLifeOfVids,
+      mazwai: testMazwai
     };
 
     if (SITE_TO_TEST === 'all') {
