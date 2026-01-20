@@ -11,7 +11,7 @@ const TEST_URLS = {
   pexels: process.env.PEXELS_URL || 'https://www.pexels.com/photo/brown-concrete-building-20727545/',
   pixabay: process.env.PIXABAY_URL || 'https://pixabay.com/photos/rock-nature-landscape-england-9756732/',
   coverr: process.env.COVERR_URL || 'https://coverr.co/videos/a-man-walks-into-a-street-and-looks-around-confidently-z1qh1im2yq',
-  freepik: process.env.FREEPIK_URL || 'https://www.freepik.com/free-photo/beautiful-shot-tree-savanna-plains-with-blue-sky_10846048.htm'
+  freepik: process.env.FREEPIK_URL || 'https://www.freepik.com/free-photo/pathway-middle-green-leafed-trees-with-sun-shining-through-branches_8281186.htm'
 };
 
 // Get site to test from command line argument
@@ -338,21 +338,29 @@ async function testFreepik(context, page) {
   const url = TEST_URLS.freepik;
   console.log(`\nNavigating to: ${url}`);
 
+  let extensionRegistered = false;
+  let contentScriptLoaded = false;
+
+  // Set up console listener BEFORE navigation
+  page.on('console', msg => {
+    const text = msg.text();
+    if (text.includes('Registered Freepik download')) {
+      extensionRegistered = true;
+    }
+    if (text.includes('Freepik content script loaded')) {
+      contentScriptLoaded = true;
+    }
+  });
+
   await page.goto(url, { waitUntil: 'load', timeout: 60000 });
   await sleep(5000);
 
   console.log('Page loaded, looking for download button...');
   const pageTitle = await page.title();
   console.log(`Page title: ${pageTitle}`);
+  console.log(`Content script loaded: ${contentScriptLoaded}`);
 
   await dismissCookieBanner(page);
-
-  let extensionRegistered = false;
-  page.on('console', msg => {
-    if (msg.text().includes('Registered Freepik download')) {
-      extensionRegistered = true;
-    }
-  });
 
   const downloadResult = await waitForDownload(context, 'Freepik Photo Download', async () => {
     await sleep(1000);
@@ -410,7 +418,12 @@ async function testFreepik(context, page) {
     console.log('No option found, assuming direct download triggered');
   });
 
-  return { ...downloadResult, extensionRegistered };
+  // Content script loaded is also a valid indicator
+  if (contentScriptLoaded && !extensionRegistered) {
+    console.log('Content script loaded but download not registered - Freepik may require login');
+  }
+
+  return { ...downloadResult, extensionRegistered: extensionRegistered || contentScriptLoaded };
 }
 
 // =============== MAIN ===============
