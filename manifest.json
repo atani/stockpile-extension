@@ -24,6 +24,10 @@
     "*://*.bgmusic.jp/*",
     "*://*.ryu110.com/*",
     "*://*.fukidesign.com/*",
+    "*://*.pexels.com/*",
+    "*://*.pixabay.com/*",
+    "*://*.coverr.co/*",
+    "*://*.videvo.net/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -71,6 +75,26 @@
     {
       "matches": ["*://*.fukidesign.com/*"],
       "js": ["content/fukidesign.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.pexels.com/*"],
+      "js": ["content/pexels.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.pixabay.com/*"],
+      "js": ["content/pixabay.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.coverr.co/*"],
+      "js": ["content/coverr.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.videvo.net/*"],
+      "js": ["content/videvo.js"],
       "run_at": "document_idle"
     }
   ],

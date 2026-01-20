@@ -48,6 +48,94 @@ const DEFAULT_SETTINGS = {
         'sfx': 'SE',
         'sound-effects': 'SE'
       }
+    },
+    'dova-syndrome': {
+      enabled: true,
+      name: 'DOVA-SYNDROME',
+      categoryMap: {
+        'bgm': 'BGM',
+        'se': 'SE'
+      }
+    },
+    'bgmer': {
+      enabled: true,
+      name: 'BGMer',
+      categoryMap: {
+        'bgm': 'BGM'
+      }
+    },
+    'maoudamashii': {
+      enabled: true,
+      name: 'MaouDamashii',
+      categoryMap: {
+        'bgm': 'BGM',
+        'se': 'SE',
+        'vocal': 'Vocal'
+      }
+    },
+    'bgmusic': {
+      enabled: true,
+      name: 'BGMusic',
+      categoryMap: {
+        'bgm': 'BGM',
+        'jingle': 'Jingle'
+      }
+    },
+    'ryuitomusic': {
+      enabled: true,
+      name: 'RyuItoMusic',
+      categoryMap: {
+        'bgm': 'BGM'
+      }
+    },
+    'fukidesign': {
+      enabled: true,
+      name: 'FukiDesign',
+      categoryMap: {
+        'fukidashi': 'Fukidashi'
+      }
+    },
+    pexels: {
+      enabled: true,
+      name: 'Pexels',
+      categoryMap: {
+        'photo': 'Photo',
+        'photos': 'Photo',
+        'image': 'Photo',
+        'video': 'Video',
+        'videos': 'Video'
+      }
+    },
+    pixabay: {
+      enabled: true,
+      name: 'Pixabay',
+      categoryMap: {
+        'photo': 'Photo',
+        'photos': 'Photo',
+        'image': 'Photo',
+        'video': 'Video',
+        'videos': 'Video'
+      }
+    },
+    coverr: {
+      enabled: true,
+      name: 'Coverr',
+      categoryMap: {
+        'video': 'Video',
+        'videos': 'Video'
+      }
+    },
+    videvo: {
+      enabled: true,
+      name: 'Videvo',
+      categoryMap: {
+        'video': 'Video',
+        'videos': 'Video',
+        'motion-graphics': 'Video',
+        'sound-effects': 'SE',
+        'sfx': 'SE',
+        'music': 'BGM'
+      }
     }
   }
 };
@@ -57,6 +145,10 @@ const baseFolderInput = document.getElementById('baseFolder');
 const enableToggle = document.getElementById('enableToggle');
 const motionElementsEnabled = document.getElementById('motionElementsEnabled');
 const audiioEnabled = document.getElementById('audiioEnabled');
+const pexelsEnabled = document.getElementById('pexelsEnabled');
+const pixabayEnabled = document.getElementById('pixabayEnabled');
+const coverrEnabled = document.getElementById('coverrEnabled');
+const videvoEnabled = document.getElementById('videvoEnabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -217,6 +309,10 @@ function populateForm(settings) {
   enableToggle.checked = settings.enabled !== false;
   motionElementsEnabled.checked = settings.sites?.motionelements?.enabled !== false;
   audiioEnabled.checked = settings.sites?.audiio?.enabled !== false;
+  pexelsEnabled.checked = settings.sites?.pexels?.enabled !== false;
+  pixabayEnabled.checked = settings.sites?.pixabay?.enabled !== false;
+  coverrEnabled.checked = settings.sites?.coverr?.enabled !== false;
+  videvoEnabled.checked = settings.sites?.videvo?.enabled !== false;
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -268,6 +364,30 @@ function collectFormData() {
     currentSettings.sites.audiio = { ...DEFAULT_SETTINGS.sites.audiio };
   }
   currentSettings.sites.audiio.enabled = audiioEnabled.checked;
+
+  // Pexels
+  if (!currentSettings.sites.pexels) {
+    currentSettings.sites.pexels = { ...DEFAULT_SETTINGS.sites.pexels };
+  }
+  currentSettings.sites.pexels.enabled = pexelsEnabled.checked;
+
+  // Pixabay
+  if (!currentSettings.sites.pixabay) {
+    currentSettings.sites.pixabay = { ...DEFAULT_SETTINGS.sites.pixabay };
+  }
+  currentSettings.sites.pixabay.enabled = pixabayEnabled.checked;
+
+  // Coverr
+  if (!currentSettings.sites.coverr) {
+    currentSettings.sites.coverr = { ...DEFAULT_SETTINGS.sites.coverr };
+  }
+  currentSettings.sites.coverr.enabled = coverrEnabled.checked;
+
+  // Videvo
+  if (!currentSettings.sites.videvo) {
+    currentSettings.sites.videvo = { ...DEFAULT_SETTINGS.sites.videvo };
+  }
+  currentSettings.sites.videvo.enabled = videvoEnabled.checked;
 
   return currentSettings;
 }

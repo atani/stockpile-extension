@@ -31,6 +31,10 @@ MotionElements、Audiio、DOVA-SYNDROME、魔王魂などのストックサイ�
 - [BGMusic](https://bgmusic.jp/)
 - [RYU ITO MUSIC](https://ryu110.com/)
 - [フキダシデザイン](https://fukidesign.com/)
+- [Pexels](https://www.pexels.com/)
+- [Pixabay](https://pixabay.com/)
+- [Coverr](https://coverr.co/)
+- [Videvo](https://www.videvo.net/)
 
 ## フォルダ構造
 
@@ -63,9 +67,22 @@ Downloads/
     │   └── Jingle/
     ├── RyuItoMusic/
     │   └── BGM/
-    └── FukiDesign/
-        └── Fukidashi/
+    ├── FukiDesign/
+    │   └── Fukidashi/
+    ├── Pexels/
+    │   ├── Photo/
+    │   └── Video/
+    ├── Pixabay/
+    │   ├── Photo/
+    │   └── Video/
+    ├── Coverr/
+    │   └── Video/
+    └── Videvo/
+        ├── Video/
+        ├── SE/
+        └── BGM/
 ```
+
 
 ## インストール
 

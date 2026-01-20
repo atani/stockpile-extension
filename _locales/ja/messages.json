@@ -83,6 +83,22 @@
     "message": "音楽、効果音",
     "description": "Audiio description"
   },
+  "pexelsDesc": {
+    "message": "写真、動画",
+    "description": "Pexels description"
+  },
+  "pixabayDesc": {
+    "message": "写真、動画",
+    "description": "Pixabay description"
+  },
+  "coverrDesc": {
+    "message": "動画",
+    "description": "Coverr description"
+  },
+  "videvoDesc": {
+    "message": "動画、効果音、音楽",
+    "description": "Videvo description"
+  },
   "categoryMapping": {
     "message": "カテゴリマッピング（MotionElements）",
     "description": "Category mapping section"

@@ -83,6 +83,22 @@
     "message": "Music, Sound Effects",
     "description": "Audiio description"
   },
+  "pexelsDesc": {
+    "message": "Photos, Videos",
+    "description": "Pexels description"
+  },
+  "pixabayDesc": {
+    "message": "Photos, Videos",
+    "description": "Pixabay description"
+  },
+  "coverrDesc": {
+    "message": "Videos",
+    "description": "Coverr description"
+  },
+  "videvoDesc": {
+    "message": "Videos, Sound Effects, Music",
+    "description": "Videvo description"
+  },
   "categoryMapping": {
     "message": "Category Mapping (MotionElements)",
     "description": "Category mapping section"
