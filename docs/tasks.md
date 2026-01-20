@@ -21,6 +21,10 @@
 - [ ] Epidemic Sound / Envato の content script 追加
 - [ ] Epidemic Sound / Envato の実測調整（タイトル/タグ/カテゴリ）
 - [ ] Pro 設定でサイトごとのON/OFFの確認（Epidemic/Envato）
+- [ ] Videezy の content script 追加と実測調整
+- [ ] Motion Array の content script 追加と実測調整
+- [ ] Mixkit の content script 追加と実測調整
+- [ ] Adobe Stock の content script 追加と実測調整
 
 ## Milestone 3 (Release Hygiene)
 - [ ] Dev: Pro Override を削除 or 非表示
