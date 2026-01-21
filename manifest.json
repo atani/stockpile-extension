@@ -30,6 +30,9 @@
     "*://*.epidemicsound.com/*",
     "*://elements.envato.com/*",
     "*://*.envato.com/*",
+    "*://*.mixkit.co/*",
+    "*://*.stock.adobe.com/*",
+    "*://*.motionarray.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*",
@@ -93,6 +96,21 @@
     {
       "matches": ["*://elements.envato.com/*", "*://*.envato.com/*"],
       "js": ["content/envato.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.mixkit.co/*"],
+      "js": ["content/mixkit.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.stock.adobe.com/*"],
+      "js": ["content/adobestock.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.motionarray.com/*"],
+      "js": ["content/motionarray.js"],
       "run_at": "document_idle"
     },
     {

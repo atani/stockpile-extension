@@ -9,7 +9,7 @@ import { addRecord } from '../lib/database.js';
 import { initExtPayBackground, getPaidStatus } from '../lib/extpay.js';
 import { syncToDrive } from '../lib/drive-sync.js';
 
-const PRO_SITE_KEYS = new Set(['artlist', 'epidemicsound', 'envato']);
+const PRO_SITE_KEYS = new Set(['artlist', 'epidemicsound', 'envato', 'mixkit', 'adobestock', 'motionarray']);
 const PRO_STATUS_CACHE_KEY = 'proStatusCache';
 const PRO_STATUS_TTL_MS = 5 * 60 * 1000;
 const DRIVE_SYNC_STATUS_KEY = 'driveSyncStatus';
@@ -193,6 +193,54 @@ async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
                pageUrl.includes('envato')) {
       siteName = 'Envato';
       category = getCategoryFromExtension(filename);
+    } else if (url.includes('mixkit') || referrer.includes('mixkit') ||
+               pageUrl.includes('mixkit')) {
+      siteName = 'Mixkit';
+      if (pageUrl.includes('/free-stock-music/') || pageUrl.includes('/music/')) {
+        category = 'BGM';
+      } else if (pageUrl.includes('/free-sound-effects/') || pageUrl.includes('/sfx/')) {
+        category = 'SE';
+      } else if (pageUrl.includes('/video-templates/')) {
+        category = 'Template';
+      } else {
+        category = 'Video';
+      }
+    } else if (url.includes('stock.adobe.com') || referrer.includes('stock.adobe.com') ||
+               pageUrl.includes('stock.adobe.com')) {
+      siteName = 'Adobe Stock';
+      if (pageUrl.includes('/video/') || pageUrl.includes('/footage/')) {
+        category = 'Video';
+      } else if (pageUrl.includes('/audio/') || pageUrl.includes('/music/')) {
+        category = 'BGM';
+      } else if (pageUrl.includes('/template')) {
+        category = 'Template';
+      } else if (pageUrl.includes('/3d/')) {
+        category = '3D';
+      } else {
+        category = 'Image';
+      }
+    } else if (url.includes('motionarray') || referrer.includes('motionarray') ||
+               pageUrl.includes('motionarray')) {
+      siteName = 'Motion Array';
+      if (pageUrl.includes('/stock-music/') || pageUrl.includes('/royalty-free-music/')) {
+        category = 'BGM';
+      } else if (pageUrl.includes('/sound-effects/')) {
+        category = 'SE';
+      } else if (pageUrl.includes('/premiere-pro-templates/') || pageUrl.includes('/premiere-pro/')) {
+        category = 'Pr_Template';
+      } else if (pageUrl.includes('/after-effects-templates/') || pageUrl.includes('/after-effects/')) {
+        category = 'AE_Template';
+      } else if (pageUrl.includes('/davinci-resolve-templates/')) {
+        category = 'DaVinci_Template';
+      } else if (pageUrl.includes('/final-cut-pro-templates/')) {
+        category = 'FCP_Template';
+      } else if (pageUrl.includes('/motion-graphics-templates/') || pageUrl.includes('/mogrt/')) {
+        category = 'Mogrt';
+      } else if (pageUrl.includes('/photos/')) {
+        category = 'Photo';
+      } else {
+        category = 'Video';
+      }
     }
   }
 
@@ -296,7 +344,10 @@ function isTargetSite(url, referrer, filename) {
     'fukidesign.com',
     'artlist',
     'epidemicsound',
-    'envato'
+    'envato',
+    'mixkit',
+    'stock.adobe.com',
+    'motionarray'
   ];
 
   // Check URL
@@ -336,7 +387,12 @@ function normalizeSiteKey(name) {
     'artlist': 'artlist',
     'epidemic sound': 'epidemicsound',
     'epidemicsound': 'epidemicsound',
-    'envato': 'envato'
+    'envato': 'envato',
+    'mixkit': 'mixkit',
+    'adobe stock': 'adobestock',
+    'adobestock': 'adobestock',
+    'motion array': 'motionarray',
+    'motionarray': 'motionarray'
   };
   return map[normalized] || null;
 }
@@ -357,7 +413,10 @@ function detectSiteKey({ url, referrer, pageUrl, filename, metadata }) {
     { key: 'fukidesign', match: 'fukidesign' },
     { key: 'artlist', match: 'artlist' },
     { key: 'epidemicsound', match: 'epidemicsound' },
-    { key: 'envato', match: 'envato' }
+    { key: 'envato', match: 'envato' },
+    { key: 'mixkit', match: 'mixkit' },
+    { key: 'adobestock', match: 'stock.adobe.com' },
+    { key: 'motionarray', match: 'motionarray' }
   ];
 
   for (const token of tokens) {
