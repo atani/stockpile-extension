@@ -57,7 +57,7 @@ async function getExtensionId(page) {
 async function enableDevOverride(page, extensionId) {
   const optionsUrl = `chrome-extension://${extensionId}/options/options.html`;
   await page.goto(optionsUrl, { waitUntil: 'domcontentloaded' });
-  await sleep(1000);
+  await sleep(2000);
 
   // Enable devOverride for testing Pro sites
   const enabled = await page.evaluate(() => {
@@ -69,16 +69,43 @@ async function enableDevOverride(page, extensionId) {
     return checkbox?.checked || false;
   });
 
-  console.log(`DevOverride enabled: ${enabled}`);
-  return enabled;
+  console.log(`DevOverride checkbox checked: ${enabled}`);
+
+  // Click save button
+  await sleep(500);
+  const saveClicked = await page.evaluate(() => {
+    const saveBtn = document.querySelector('#saveBtn');
+    if (saveBtn) {
+      saveBtn.click();
+      return true;
+    }
+    return false;
+  });
+
+  console.log(`Save button clicked: ${saveClicked}`);
+  await sleep(2000);
+
+  // Verify settings were saved
+  const verified = await page.evaluate(async () => {
+    return new Promise(resolve => {
+      chrome.storage.local.get('settings', (result) => {
+        resolve(result?.settings?.pro?.devOverride === true);
+      });
+    });
+  });
+
+  console.log(`DevOverride setting verified in storage: ${verified}`);
+  return verified;
 }
 
 async function testMixkit(browser, extensionId) {
   console.log('\n=== Testing Mixkit ===');
   const page = await browser.newPage();
 
+  const consoleLogs = [];
   page.on('console', msg => {
     const text = msg.text();
+    consoleLogs.push(text);
     if (text.includes('Stockpile')) {
       console.log(`[Console] ${text}`);
     }
@@ -93,18 +120,62 @@ async function testMixkit(browser, extensionId) {
     const title = await page.title();
     console.log(`Page title: ${title}`);
 
-    // Find and click download button
-    const downloadBtn = await page.$('button[class*="download"]');
-    if (downloadBtn) {
-      console.log('Found download button, clicking...');
-      await downloadBtn.click();
+    // Check if content script loaded
+    const scriptLoaded = await page.evaluate(() => document.documentElement.getAttribute('data-stockpile-mixkit') === 'loaded');
+    console.log(`Content script loaded: ${scriptLoaded}`);
+
+    // Enable debug mode
+    await page.evaluate(() => {
+      try {
+        window.localStorage.setItem('stockpileDebug', '1');
+      } catch (e) { }
+    });
+
+    // Find download button and inspect it
+    const buttonInfo = await page.evaluate(() => {
+      const btn = document.querySelector('button[class*="download"], a[class*="download"], [data-testid*="download"]');
+      if (!btn) return null;
+      return {
+        tag: btn.tagName,
+        className: btn.className,
+        href: btn.href || null,
+        innerText: btn.innerText?.substring(0, 50),
+        dataset: JSON.stringify(btn.dataset)
+      };
+    });
+
+    if (buttonInfo) {
+      console.log('Download button found:', JSON.stringify(buttonInfo, null, 2));
+
+      // Click the download button
+      await page.click('button[class*="download"], a[class*="download"], [data-testid*="download"]');
       await sleep(5000);
-      console.log('Download initiated');
-      return { success: true, site: 'Mixkit', title };
+
+      // Check for any REGISTER_DOWNLOAD logs
+      const registerLogs = consoleLogs.filter(l => l.includes('Registered') || l.includes('REGISTER') || l.includes('Stockpile'));
+      if (registerLogs.length > 0) {
+        console.log('Stockpile-related logs found:', registerLogs);
+      } else {
+        console.log('No Stockpile registration logs found in console');
+      }
     } else {
-      console.log('Download button not found');
-      return { success: false, site: 'Mixkit', error: 'Download button not found' };
+      console.log('Download button not found, checking other selectors...');
+
+      // Try alternative selectors
+      const allButtons = await page.evaluate(() => {
+        const buttons = document.querySelectorAll('button, a');
+        return Array.from(buttons)
+          .filter(b => b.innerText?.toLowerCase().includes('download'))
+          .map(b => ({
+            tag: b.tagName,
+            className: b.className,
+            innerText: b.innerText?.substring(0, 50)
+          }));
+      });
+      console.log('Buttons containing "download" text:', JSON.stringify(allButtons, null, 2));
     }
+
+    return { success: scriptLoaded, site: 'Mixkit', title, note: scriptLoaded ? 'Content script loaded' : 'Content script NOT loaded' };
   } catch (error) {
     console.error('Mixkit test error:', error.message);
     return { success: false, site: 'Mixkit', error: error.message };
@@ -133,7 +204,11 @@ async function testEpidemicSound(browser, extensionId) {
     const title = await page.title();
     console.log(`Page title: ${title}`);
 
-    return { success: true, site: 'Epidemic Sound', title, note: 'Requires login for download' };
+    // Check if content script loaded
+    const scriptLoaded = await page.evaluate(() => document.documentElement.getAttribute('data-stockpile-epidemicsound') === 'loaded');
+    console.log(`Content script loaded: ${scriptLoaded}`);
+
+    return { success: scriptLoaded, site: 'Epidemic Sound', title, note: scriptLoaded ? 'Content script loaded' : 'Content script NOT loaded' };
   } catch (error) {
     console.error('Epidemic Sound test error:', error.message);
     return { success: false, site: 'Epidemic Sound', error: error.message };
@@ -154,7 +229,7 @@ async function testEnvato(browser, extensionId) {
   });
 
   try {
-    const url = 'https://elements.envato.com/happy-corporate-ambient-L62ZK43';
+    const url = 'https://elements.envato.com/upbeat-corporate-AVDJZMS';
     console.log(`Navigating to ${url}...`);
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
     await sleep(3000);
@@ -162,7 +237,11 @@ async function testEnvato(browser, extensionId) {
     const title = await page.title();
     console.log(`Page title: ${title}`);
 
-    return { success: true, site: 'Envato', title, note: 'Requires login for download' };
+    // Check if content script loaded
+    const scriptLoaded = await page.evaluate(() => document.documentElement.getAttribute('data-stockpile-envato') === 'loaded');
+    console.log(`Content script loaded: ${scriptLoaded}`);
+
+    return { success: scriptLoaded, site: 'Envato', title, note: scriptLoaded ? 'Content script loaded' : 'Content script NOT loaded' };
   } catch (error) {
     console.error('Envato test error:', error.message);
     return { success: false, site: 'Envato', error: error.message };
@@ -183,7 +262,7 @@ async function testMotionArray(browser, extensionId) {
   });
 
   try {
-    const url = 'https://motionarray.com/stock-video/sunset-mountain-view-2848115/';
+    const url = 'https://motionarray.com/stock-video/aerial-drone-flight-over-stunning-autumn-forest-1774783/';
     console.log(`Navigating to ${url}...`);
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
     await sleep(3000);
@@ -191,7 +270,11 @@ async function testMotionArray(browser, extensionId) {
     const title = await page.title();
     console.log(`Page title: ${title}`);
 
-    return { success: true, site: 'Motion Array', title, note: 'Requires login for download' };
+    // Check if content script loaded
+    const scriptLoaded = await page.evaluate(() => document.documentElement.getAttribute('data-stockpile-motionarray') === 'loaded');
+    console.log(`Content script loaded: ${scriptLoaded}`);
+
+    return { success: scriptLoaded, site: 'Motion Array', title, note: scriptLoaded ? 'Content script loaded' : 'Content script NOT loaded' };
   } catch (error) {
     console.error('Motion Array test error:', error.message);
     return { success: false, site: 'Motion Array', error: error.message };
@@ -220,7 +303,11 @@ async function testAdobeStock(browser, extensionId) {
     const title = await page.title();
     console.log(`Page title: ${title}`);
 
-    return { success: true, site: 'Adobe Stock', title, note: 'Requires login for download' };
+    // Check if content script loaded
+    const scriptLoaded = await page.evaluate(() => document.documentElement.getAttribute('data-stockpile-adobestock') === 'loaded');
+    console.log(`Content script loaded: ${scriptLoaded}`);
+
+    return { success: scriptLoaded, site: 'Adobe Stock', title, note: scriptLoaded ? 'Content script loaded' : 'Content script NOT loaded' };
   } catch (error) {
     console.error('Adobe Stock test error:', error.message);
     return { success: false, site: 'Adobe Stock', error: error.message };
@@ -288,8 +375,8 @@ async function main() {
     console.error('Test failed:', error);
     process.exit(1);
   } finally {
-    console.log('\nKeeping browser open for 30 seconds for inspection...');
-    await sleep(30000);
+    console.log('\nKeeping browser open for 5 seconds for inspection...');
+    await sleep(5000);
     await browser.close();
   }
 }

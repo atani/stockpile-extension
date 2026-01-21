@@ -239,6 +239,8 @@
   }
 
   function init() {
+    window.__stockpileMotionArrayLoaded = true;
+    document.documentElement.setAttribute('data-stockpile-motionarray', 'loaded');
     console.log('[Stockpile] Motion Array content script loaded');
     setupDownloadInterception();
     setupXHRInterception();

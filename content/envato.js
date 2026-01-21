@@ -299,6 +299,8 @@
   }
 
   function init() {
+    window.__stockpileEnvatoLoaded = true;
+    document.documentElement.setAttribute('data-stockpile-envato', 'loaded');
     console.log('[Stockpile] Envato content script loaded');
     setupDownloadInterception();
     setupXHRInterception();

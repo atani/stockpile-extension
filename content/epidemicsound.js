@@ -262,6 +262,8 @@
   }
 
   function init() {
+    window.__stockpileEpidemicSoundLoaded = true;
+    document.documentElement.setAttribute('data-stockpile-epidemicsound', 'loaded');
     console.log('[Stockpile] Epidemic Sound content script loaded');
     setupDownloadInterception();
     setupXHRInterception();

@@ -216,6 +216,8 @@
   }
 
   function init() {
+    window.__stockpileAdobeStockLoaded = true;
+    document.documentElement.setAttribute('data-stockpile-adobestock', 'loaded');
     console.log('[Stockpile] Adobe Stock content script loaded');
     setupDownloadInterception();
     setupXHRInterception();

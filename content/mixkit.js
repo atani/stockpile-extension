@@ -200,6 +200,8 @@
   }
 
   function init() {
+    window.__stockpileMixkitLoaded = true;
+    document.documentElement.setAttribute('data-stockpile-mixkit', 'loaded');
     console.log('[Stockpile] Mixkit content script loaded');
     setupDownloadInterception();
     setupXHRInterception();
