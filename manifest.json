@@ -99,17 +99,17 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://*.mixkit.co/*"],
+      "matches": ["*://mixkit.co/*", "*://*.mixkit.co/*"],
       "js": ["content/mixkit.js"],
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://*.stock.adobe.com/*"],
+      "matches": ["*://stock.adobe.com/*", "*://*.stock.adobe.com/*"],
       "js": ["content/adobestock.js"],
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://*.motionarray.com/*"],
+      "matches": ["*://motionarray.com/*", "*://*.motionarray.com/*"],
       "js": ["content/motionarray.js"],
       "run_at": "document_idle"
     },
