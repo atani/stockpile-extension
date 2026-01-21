@@ -14,6 +14,13 @@
         const items = Array.isArray(data) ? data : [data];
         for (const item of items) {
           if (item && typeof item === 'object') {
+            if (Array.isArray(item['@graph'])) {
+              for (const graphItem of item['@graph']) {
+                if (graphItem && typeof graphItem === 'object') {
+                  return graphItem;
+                }
+              }
+            }
             return item;
           }
         }
@@ -25,13 +32,27 @@
   }
 
   function extractTitle() {
+    // Try h1 first
+    const h1 = document.querySelector('h1');
+    if (h1?.textContent?.trim()) {
+      const text = h1.textContent.trim();
+      if (text.length > 2 && !text.toLowerCase().includes('epidemic sound')) {
+        return text;
+      }
+    }
+
+    // Try JSON-LD
     const jsonLd = extractJsonLd();
     if (jsonLd?.name) return String(jsonLd.name).trim();
 
+    // Try various selectors
     const selectors = [
-      'h1',
       '[data-testid="track-title"]',
+      '[data-testid="sfx-title"]',
       '.track-title',
+      '.track-name',
+      '[class*="TrackTitle"]',
+      '[class*="SfxTitle"]',
       'meta[property="og:title"]'
     ];
 
@@ -39,7 +60,9 @@
       const el = document.querySelector(selector);
       if (el) {
         const title = el.getAttribute('content') || el.textContent?.trim();
-        if (title && title.length < 200) return title;
+        if (title && title.length < 200) {
+          return title.replace(/\s*[-|]\s*Epidemic Sound.*$/i, '').trim();
+        }
       }
     }
 
@@ -47,34 +70,82 @@
   }
 
   function extractCategory() {
-    const jsonLd = extractJsonLd();
-    if (jsonLd?.genre) return String(jsonLd.genre).toLowerCase();
-
     const url = window.location.href.toLowerCase();
-    if (url.includes('/sound-effects') || url.includes('/sfx')) return 'sfx';
-    if (url.includes('/music')) return 'music';
+    const path = window.location.pathname.toLowerCase();
+
+    // Sound effects
+    if (path.includes('/sound-effects') || path.includes('/sfx')) {
+      return 'sfx';
+    }
+    // Music tracks
+    if (path.includes('/music') || path.includes('/track/')) {
+      return 'music';
+    }
+    // Collections/playlists
+    if (path.includes('/playlist') || path.includes('/collection')) {
+      return 'music';
+    }
+
+    // Try JSON-LD
+    const jsonLd = extractJsonLd();
+    if (jsonLd?.genre) {
+      const genre = String(jsonLd.genre).toLowerCase();
+      if (genre.includes('sfx') || genre.includes('sound effect')) return 'sfx';
+      return 'music';
+    }
+
     return 'music';
   }
 
   function extractTags() {
+    const tags = [];
+
+    // Try JSON-LD keywords
     const jsonLd = extractJsonLd();
     if (jsonLd?.keywords) {
       if (Array.isArray(jsonLd.keywords)) {
-        return jsonLd.keywords.map(String).slice(0, 20);
-      }
-      if (typeof jsonLd.keywords === 'string') {
-        return jsonLd.keywords.split(',').map(t => t.trim()).filter(Boolean).slice(0, 20);
+        jsonLd.keywords.forEach(k => tags.push(String(k)));
+      } else if (typeof jsonLd.keywords === 'string') {
+        jsonLd.keywords.split(',').forEach(k => {
+          const trimmed = k.trim();
+          if (trimmed) tags.push(trimmed);
+        });
       }
     }
 
-    const tags = [];
-    const selectors = ['.tag', '.genre', '.mood', '[data-testid="tag"]'];
+    // Try genre from JSON-LD
+    if (jsonLd?.genre) {
+      const genres = Array.isArray(jsonLd.genre) ? jsonLd.genre : [jsonLd.genre];
+      genres.forEach(g => {
+        const trimmed = String(g).trim();
+        if (trimmed && !tags.includes(trimmed)) tags.push(trimmed);
+      });
+    }
+
+    // Try tag elements on page
+    const selectors = [
+      '.tag',
+      '.genre',
+      '.mood',
+      '[data-testid="tag"]',
+      '[data-testid="genre"]',
+      '[data-testid="mood"]',
+      '[class*="Tag"]',
+      '[class*="Genre"]',
+      '[class*="Mood"]',
+      'a[href*="/genre/"]',
+      'a[href*="/mood/"]'
+    ];
+
     selectors.forEach(selector => {
       document.querySelectorAll(selector).forEach(el => {
         const tag = el.textContent?.trim();
-        if (tag && !tags.includes(tag)) tags.push(tag);
+        if (tag && tag.length < 30 && !tags.includes(tag)) {
+          tags.push(tag);
+        }
       });
     });
+
     return tags.slice(0, 20);
   }
 
@@ -82,7 +153,14 @@
     const jsonLd = extractJsonLd();
     if (jsonLd?.duration) return String(jsonLd.duration);
 
-    const selectors = ['time', '.duration', '[data-testid="track-duration"]'];
+    const selectors = [
+      'time',
+      '.duration',
+      '[data-testid="track-duration"]',
+      '[class*="Duration"]',
+      '[class*="Time"]'
+    ];
+
     for (const selector of selectors) {
       const el = document.querySelector(selector);
       if (el) {
@@ -96,14 +174,16 @@
   function mapCategory(rawCategory) {
     if (!rawCategory) return 'BGM';
     const category = rawCategory.toLowerCase();
-    if (category.includes('sfx') || category.includes('sound')) return 'SE';
+    if (category.includes('sfx') || category.includes('sound-effect') || category.includes('sound effect')) {
+      return 'SE';
+    }
     return 'BGM';
   }
 
   function getPageMetadata() {
     const jsonLd = extractJsonLd();
     const rawCategory = extractCategory();
-    return {
+    const metadata = {
       site: SITE_NAME,
       title: extractTitle(),
       rawCategory,
@@ -112,9 +192,12 @@
       duration: extractDuration() || jsonLd?.duration || null,
       sourceUrl: window.location.href
     };
+    debugLog('metadata', metadata);
+    return metadata;
   }
 
   function registerDownload(url, metadata) {
+    debugLog('register', { url, metadata });
     chrome.runtime.sendMessage({
       type: 'REGISTER_DOWNLOAD',
       data: { url, metadata }
@@ -126,10 +209,14 @@
       const target = event.target.closest(
         'a[href*="download"], ' +
         'button[class*="download"], ' +
+        'button[class*="Download"], ' +
         '[data-download], ' +
         '[data-testid*="download"], ' +
+        '[data-testid*="Download"], ' +
         '[aria-label*="Download"], ' +
-        '[class*="download"]'
+        '[aria-label*="download"], ' +
+        '[class*="download"], ' +
+        '[class*="Download"]'
       );
 
       if (target) {
@@ -170,13 +257,25 @@
 
   function isDownloadUrl(url) {
     const lower = url.toLowerCase();
-    return lower.includes('download') || lower.includes('license');
+    return lower.includes('download') || lower.includes('license') ||
+           lower.includes('.mp3') || lower.includes('.wav') || lower.includes('.aiff');
   }
 
   function init() {
     console.log('[Stockpile] Epidemic Sound content script loaded');
     setupDownloadInterception();
     setupXHRInterception();
+    debugLog('init', { url: window.location.href });
+  }
+
+  function debugLog(label, payload) {
+    try {
+      if (window.localStorage.getItem('stockpileDebug') === '1') {
+        console.log(`[Stockpile][EpidemicSound][${label}]`, payload);
+      }
+    } catch {
+      // ignore storage access errors
+    }
   }
 
   if (document.readyState === 'loading') {

@@ -188,11 +188,45 @@ async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
     } else if (url.includes('epidemicsound') || referrer.includes('epidemicsound') ||
                pageUrl.includes('epidemicsound')) {
       siteName = 'Epidemic Sound';
-      category = getCategoryFromExtension(filename);
+      if (pageUrl.includes('/sound-effects') || pageUrl.includes('/sfx')) {
+        category = 'SE';
+      } else {
+        category = 'BGM';
+      }
     } else if (url.includes('envato') || referrer.includes('envato') ||
                pageUrl.includes('envato')) {
       siteName = 'Envato';
-      category = getCategoryFromExtension(filename);
+      if (pageUrl.includes('/video-templates') || pageUrl.includes('/stock-video') ||
+          pageUrl.includes('/footage')) {
+        category = 'Video';
+      } else if (pageUrl.includes('/royalty-free-music') || pageUrl.includes('/stock-music') ||
+                 pageUrl.includes('/audio/')) {
+        category = 'BGM';
+      } else if (pageUrl.includes('/sound-effects')) {
+        category = 'SE';
+      } else if (pageUrl.includes('/premiere-pro')) {
+        category = 'Pr_Template';
+      } else if (pageUrl.includes('/after-effects')) {
+        category = 'AE_Template';
+      } else if (pageUrl.includes('/davinci-resolve')) {
+        category = 'DaVinci_Template';
+      } else if (pageUrl.includes('/final-cut-pro')) {
+        category = 'FCP_Template';
+      } else if (pageUrl.includes('/motion-graphics') || pageUrl.includes('/mogrt')) {
+        category = 'Mogrt';
+      } else if (pageUrl.includes('/graphic-templates') || pageUrl.includes('/graphics/')) {
+        category = 'Graphics';
+      } else if (pageUrl.includes('/photos') || pageUrl.includes('/stock-photos')) {
+        category = 'Photo';
+      } else if (pageUrl.includes('/3d/')) {
+        category = '3D';
+      } else if (pageUrl.includes('/presentation-templates')) {
+        category = 'Presentation';
+      } else if (pageUrl.includes('/fonts')) {
+        category = 'Font';
+      } else {
+        category = getCategoryFromExtension(filename);
+      }
     } else if (url.includes('mixkit') || referrer.includes('mixkit') ||
                pageUrl.includes('mixkit')) {
       siteName = 'Mixkit';
