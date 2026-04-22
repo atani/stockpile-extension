@@ -83,6 +83,30 @@
     "message": "Music, Sound Effects",
     "description": "Audiio description"
   },
+  "pexelsDesc": {
+    "message": "Photos, Videos",
+    "description": "Pexels description"
+  },
+  "pixabayDesc": {
+    "message": "Photos, Videos",
+    "description": "Pixabay description"
+  },
+  "coverrDesc": {
+    "message": "Videos",
+    "description": "Coverr description"
+  },
+  "freepikDesc": {
+    "message": "Photos, Videos, Vectors, PSDs, Icons",
+    "description": "Freepik description"
+  },
+  "footagecrateDesc": {
+    "message": "Videos, VFX, Sound Effects, Music",
+    "description": "FootageCrate description"
+  },
+  "pond5Desc": {
+    "message": "Videos, Music, Sound Effects, Photos, Templates",
+    "description": "Pond5 description"
+  },
   "categoryMapping": {
     "message": "Category Mapping (MotionElements)",
     "description": "Category mapping section"

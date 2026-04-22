@@ -23,6 +23,7 @@
   "homepage": "https://github.com/atani/stockpile-extension#readme",
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
+    "playwright": "^1.57.0",
     "puppeteer": "^24.34.0"
   }
 }

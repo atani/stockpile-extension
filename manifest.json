@@ -24,6 +24,12 @@
     "*://*.bgmusic.jp/*",
     "*://*.ryu110.com/*",
     "*://*.fukidesign.com/*",
+    "*://*.pexels.com/*",
+    "*://*.pixabay.com/*",
+    "*://*.coverr.co/*",
+    "*://*.freepik.com/*",
+    "*://*.footagecrate.com/*",
+    "*://*.pond5.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
     "*://*.telnyxcloudstorage.com/*"
@@ -71,6 +77,36 @@
     {
       "matches": ["*://*.fukidesign.com/*"],
       "js": ["content/fukidesign.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.pexels.com/*"],
+      "js": ["content/pexels.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.pixabay.com/*"],
+      "js": ["content/pixabay.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.coverr.co/*"],
+      "js": ["content/coverr.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.freepik.com/*"],
+      "js": ["content/freepik.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.footagecrate.com/*"],
+      "js": ["content/footagecrate.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.pond5.com/*"],
+      "js": ["content/pond5.js"],
       "run_at": "document_idle"
     }
   ],

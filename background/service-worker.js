@@ -122,6 +122,40 @@ async function determineFolder(downloadItem, metadata, activeTabUrl = null) {
                pageUrl.includes('fukidesign.com')) {
       siteName = 'FukiDesign';
       category = 'Fukidashi';
+    } else if (url.includes('pexels.com') || referrer.includes('pexels.com') ||
+               pageUrl.includes('pexels.com')) {
+      siteName = 'Pexels';
+      if (pageUrl.includes('/videos/') || pageUrl.includes('/video/')) {
+        category = 'Video';
+      } else {
+        category = 'Photo';
+      }
+    } else if (url.includes('pixabay.com') || referrer.includes('pixabay.com') ||
+               pageUrl.includes('pixabay.com')) {
+      siteName = 'Pixabay';
+      if (pageUrl.includes('/videos/') || pageUrl.includes('/video/')) {
+        category = 'Video';
+      } else {
+        category = 'Photo';
+      }
+    } else if (url.includes('coverr.co') || referrer.includes('coverr.co') ||
+               pageUrl.includes('coverr.co')) {
+      siteName = 'Coverr';
+      category = 'Video';
+    } else if (url.includes('freepik.com') || referrer.includes('freepik.com') ||
+               pageUrl.includes('freepik.com')) {
+      siteName = 'Freepik';
+      if (pageUrl.includes('/video') || pageUrl.includes('/videos')) {
+        category = 'Video';
+      } else if (pageUrl.includes('/psd')) {
+        category = 'PSD';
+      } else if (pageUrl.includes('/vector') || pageUrl.includes('/vectors')) {
+        category = 'Vector';
+      } else if (pageUrl.includes('/icon') || pageUrl.includes('/icons')) {
+        category = 'Icon';
+      } else {
+        category = 'Photo';
+      }
     }
   }
 
@@ -193,6 +227,15 @@ function getCategoryFromExtension(filename) {
     'flac': 'BGM',
     'ogg': 'BGM',
     'm4a': 'BGM',
+    // Images
+    'jpg': 'Photo',
+    'jpeg': 'Photo',
+    'png': 'Photo',
+    'gif': 'Photo',
+    'webp': 'Photo',
+    'svg': 'Photo',
+    'bmp': 'Photo',
+    'tiff': 'Photo',
     // Premiere Pro
     'mogrt': 'Mogrt',
     'prproj': 'Pr_Template',
@@ -219,7 +262,11 @@ function isTargetSite(url, referrer, filename) {
     'maou.audio',
     'bgmusic.jp',
     'ryu110.com',
-    'fukidesign.com'
+    'fukidesign.com',
+    'pexels.com',
+    'pixabay.com',
+    'coverr.co',
+    'freepik.com'
   ];
 
   // Check URL

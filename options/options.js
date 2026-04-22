@@ -48,6 +48,119 @@ const DEFAULT_SETTINGS = {
         'sfx': 'SE',
         'sound-effects': 'SE'
       }
+    },
+    'dova-syndrome': {
+      enabled: true,
+      name: 'DOVA-SYNDROME',
+      categoryMap: {
+        'bgm': 'BGM',
+        'se': 'SE'
+      }
+    },
+    'bgmer': {
+      enabled: true,
+      name: 'BGMer',
+      categoryMap: {
+        'bgm': 'BGM'
+      }
+    },
+    'maoudamashii': {
+      enabled: true,
+      name: 'MaouDamashii',
+      categoryMap: {
+        'bgm': 'BGM',
+        'se': 'SE',
+        'vocal': 'Vocal'
+      }
+    },
+    'bgmusic': {
+      enabled: true,
+      name: 'BGMusic',
+      categoryMap: {
+        'bgm': 'BGM',
+        'jingle': 'Jingle'
+      }
+    },
+    'ryuitomusic': {
+      enabled: true,
+      name: 'RyuItoMusic',
+      categoryMap: {
+        'bgm': 'BGM'
+      }
+    },
+    'fukidesign': {
+      enabled: true,
+      name: 'FukiDesign',
+      categoryMap: {
+        'fukidashi': 'Fukidashi'
+      }
+    },
+    pexels: {
+      enabled: true,
+      name: 'Pexels',
+      categoryMap: {
+        'photo': 'Photo',
+        'photos': 'Photo',
+        'image': 'Photo',
+        'video': 'Video',
+        'videos': 'Video'
+      }
+    },
+    pixabay: {
+      enabled: true,
+      name: 'Pixabay',
+      categoryMap: {
+        'photo': 'Photo',
+        'photos': 'Photo',
+        'image': 'Photo',
+        'video': 'Video',
+        'videos': 'Video'
+      }
+    },
+    coverr: {
+      enabled: true,
+      name: 'Coverr',
+      categoryMap: {
+        'video': 'Video',
+        'videos': 'Video'
+      }
+    },
+    freepik: {
+      enabled: true,
+      name: 'Freepik',
+      categoryMap: {
+        'video': 'Video',
+        'videos': 'Video',
+        'photo': 'Photo',
+        'photos': 'Photo',
+        'psd': 'PSD',
+        'vector': 'Vector',
+        'vectors': 'Vector',
+        'icon': 'Icon',
+        'icons': 'Icon'
+      }
+    },
+    footagecrate: {
+      enabled: true,
+      name: 'FootageCrate',
+      categoryMap: {
+        'video': 'Video',
+        'vfx': 'VFX',
+        'sfx': 'SE',
+        'music': 'BGM'
+      }
+    },
+    pond5: {
+      enabled: true,
+      name: 'Pond5',
+      categoryMap: {
+        'video': 'Video',
+        'footage': 'Video',
+        'music': 'BGM',
+        'sfx': 'SE',
+        'photo': 'Photo',
+        'ae': 'AE_Template'
+      }
     }
   }
 };
@@ -57,6 +170,12 @@ const baseFolderInput = document.getElementById('baseFolder');
 const enableToggle = document.getElementById('enableToggle');
 const motionElementsEnabled = document.getElementById('motionElementsEnabled');
 const audiioEnabled = document.getElementById('audiioEnabled');
+const pexelsEnabled = document.getElementById('pexelsEnabled');
+const pixabayEnabled = document.getElementById('pixabayEnabled');
+const coverrEnabled = document.getElementById('coverrEnabled');
+const freepikEnabled = document.getElementById('freepikEnabled');
+const footagecrateEnabled = document.getElementById('footagecrateEnabled');
+const pond5Enabled = document.getElementById('pond5Enabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -217,6 +336,12 @@ function populateForm(settings) {
   enableToggle.checked = settings.enabled !== false;
   motionElementsEnabled.checked = settings.sites?.motionelements?.enabled !== false;
   audiioEnabled.checked = settings.sites?.audiio?.enabled !== false;
+  pexelsEnabled.checked = settings.sites?.pexels?.enabled !== false;
+  pixabayEnabled.checked = settings.sites?.pixabay?.enabled !== false;
+  coverrEnabled.checked = settings.sites?.coverr?.enabled !== false;
+  freepikEnabled.checked = settings.sites?.freepik?.enabled !== false;
+  footagecrateEnabled.checked = settings.sites?.footagecrate?.enabled !== false;
+  pond5Enabled.checked = settings.sites?.pond5?.enabled !== false;
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -268,6 +393,42 @@ function collectFormData() {
     currentSettings.sites.audiio = { ...DEFAULT_SETTINGS.sites.audiio };
   }
   currentSettings.sites.audiio.enabled = audiioEnabled.checked;
+
+  // Pexels
+  if (!currentSettings.sites.pexels) {
+    currentSettings.sites.pexels = { ...DEFAULT_SETTINGS.sites.pexels };
+  }
+  currentSettings.sites.pexels.enabled = pexelsEnabled.checked;
+
+  // Pixabay
+  if (!currentSettings.sites.pixabay) {
+    currentSettings.sites.pixabay = { ...DEFAULT_SETTINGS.sites.pixabay };
+  }
+  currentSettings.sites.pixabay.enabled = pixabayEnabled.checked;
+
+  // Coverr
+  if (!currentSettings.sites.coverr) {
+    currentSettings.sites.coverr = { ...DEFAULT_SETTINGS.sites.coverr };
+  }
+  currentSettings.sites.coverr.enabled = coverrEnabled.checked;
+
+  // Freepik
+  if (!currentSettings.sites.freepik) {
+    currentSettings.sites.freepik = { ...DEFAULT_SETTINGS.sites.freepik };
+  }
+  currentSettings.sites.freepik.enabled = freepikEnabled.checked;
+
+  // FootageCrate
+  if (!currentSettings.sites.footagecrate) {
+    currentSettings.sites.footagecrate = { ...DEFAULT_SETTINGS.sites.footagecrate };
+  }
+  currentSettings.sites.footagecrate.enabled = footagecrateEnabled.checked;
+
+  // Pond5
+  if (!currentSettings.sites.pond5) {
+    currentSettings.sites.pond5 = { ...DEFAULT_SETTINGS.sites.pond5 };
+  }
+  currentSettings.sites.pond5.enabled = pond5Enabled.checked;
 
   return currentSettings;
 }

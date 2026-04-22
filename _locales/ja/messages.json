@@ -83,6 +83,30 @@
     "message": "音楽、効果音",
     "description": "Audiio description"
   },
+  "pexelsDesc": {
+    "message": "写真、動画",
+    "description": "Pexels description"
+  },
+  "pixabayDesc": {
+    "message": "写真、動画",
+    "description": "Pixabay description"
+  },
+  "coverrDesc": {
+    "message": "動画",
+    "description": "Coverr description"
+  },
+  "freepikDesc": {
+    "message": "写真、動画、ベクター、PSD、アイコン",
+    "description": "Freepik description"
+  },
+  "footagecrateDesc": {
+    "message": "動画、VFX、効果音、音楽",
+    "description": "FootageCrate description"
+  },
+  "pond5Desc": {
+    "message": "動画、音楽、効果音、写真、テンプレート",
+    "description": "Pond5 description"
+  },
   "categoryMapping": {
     "message": "カテゴリマッピング（MotionElements）",
     "description": "Category mapping section"
