@@ -1,0 +1,51 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          release-type: node
+
+  publish-to-chrome-web-store:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Create zip file
+        run: |
+          zip -r extension.zip . \
+            -x "*.git*" \
+            -x "node_modules/*" \
+            -x "screenshots/*" \
+            -x "*.md" \
+            -x "package*.json" \
+            -x ".github/*" \
+            -x "scripts/*" \
+            -x "tests/*" \
+            -x "*.zip"
+
+      - name: Upload to Chrome Web Store
+        uses: mnao305/chrome-extension-upload@v6.0.0
+        with:
+          file-path: extension.zip
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          publish: true
