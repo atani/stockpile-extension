@@ -13,7 +13,9 @@
   "permissions": [
     "downloads",
     "storage",
-    "alarms"
+    "alarms",
+    "identity",
+    "notifications"
   ],
   "host_permissions": [
     "*://*.motionelements.com/*",
@@ -24,9 +26,20 @@
     "*://*.bgmusic.jp/*",
     "*://*.ryu110.com/*",
     "*://*.fukidesign.com/*",
+    "*://*.artlist.io/*",
+    "*://*.epidemicsound.com/*",
+    "*://elements.envato.com/*",
+    "*://*.envato.com/*",
+    "*://mixkit.co/*",
+    "*://*.mixkit.co/*",
+    "*://stock.adobe.com/*",
+    "*://*.stock.adobe.com/*",
+    "*://motionarray.com/*",
+    "*://*.motionarray.com/*",
     "*://*.amazonaws.com/*",
     "*://*.cloudfront.net/*",
-    "*://*.telnyxcloudstorage.com/*"
+    "*://*.telnyxcloudstorage.com/*",
+    "https://www.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background/service-worker.js",
@@ -72,8 +85,49 @@
       "matches": ["*://*.fukidesign.com/*"],
       "js": ["content/fukidesign.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.artlist.io/*"],
+      "js": ["content/artlist.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.epidemicsound.com/*"],
+      "js": ["content/epidemicsound.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://elements.envato.com/*", "*://*.envato.com/*"],
+      "js": ["content/envato.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://mixkit.co/*", "*://*.mixkit.co/*"],
+      "js": ["content/mixkit.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://stock.adobe.com/*", "*://*.stock.adobe.com/*"],
+      "js": ["content/adobestock.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://motionarray.com/*", "*://*.motionarray.com/*"],
+      "js": ["content/motionarray.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://extensionpay.com/*"],
+      "js": ["lib/extpay.vendor.js"],
+      "run_at": "document_start"
     }
   ],
+  "oauth2": {
+    "client_id": "480657238230-8vskcel8e9bvoid66613unreeu4vidqv.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
   "action": {
     "default_popup": "popup/popup.html",
     "default_title": "__MSG_appTitle__",

@@ -47,6 +47,114 @@
     "message": "設定",
     "description": "Settings button title"
   },
+  "proFeatures": {
+    "message": "Pro 機能",
+    "description": "Pro features section title"
+  },
+  "proBadge": {
+    "message": "Pro",
+    "description": "Pro badge label"
+  },
+  "proStatusActive": {
+    "message": "Pro が有効です",
+    "description": "Pro active status"
+  },
+  "proStatusInactive": {
+    "message": "Pro を有効化できます",
+    "description": "Pro inactive status"
+  },
+  "upgrade": {
+    "message": "アップグレード",
+    "description": "Upgrade button"
+  },
+  "upgradeFailed": {
+    "message": "決済ページを開けませんでした",
+    "description": "Upgrade failure message"
+  },
+  "proSitePack": {
+    "message": "サイト追加パック",
+    "description": "Pro site pack label"
+  },
+  "proSitePackFull": {
+    "message": "サイト追加パック（Artlist / Epidemic Sound / Envato）",
+    "description": "Pro site pack full label"
+  },
+  "proSitePackDesc": {
+    "message": "Artlist / Epidemic Sound / Envato",
+    "description": "Pro site pack description"
+  },
+  "proDriveSync": {
+    "message": "Google Drive 同期",
+    "description": "Drive sync label"
+  },
+  "proDriveSyncDesc": {
+    "message": "設定と履歴を Drive に同期",
+    "description": "Drive sync description"
+  },
+  "proDriveSyncSettings": {
+    "message": "設定を同期",
+    "description": "Drive sync settings toggle"
+  },
+  "proDriveSyncHistory": {
+    "message": "履歴を同期",
+    "description": "Drive sync history toggle"
+  },
+  "proDriveSyncExports": {
+    "message": "エクスポートを同期",
+    "description": "Drive sync exports toggle"
+  },
+  "proDevOverride": {
+    "message": "Dev: Pro 強制有効",
+    "description": "Dev pro override label"
+  },
+  "proDevOverrideDesc": {
+    "message": "ローカル確認用に Pro 機能を有効化",
+    "description": "Dev pro override description"
+  },
+  "proDevOverrideNote": {
+    "message": "リリース前に削除または無効化してください。",
+    "description": "Dev pro override note"
+  },
+  "proDriveWebClientId": {
+    "message": "Drive Web Client ID（Brave用）",
+    "description": "Drive web client id label"
+  },
+  "proDriveWebClientIdDesc": {
+    "message": "Brave 用の Web OAuth クライアントIDを設定します。",
+    "description": "Drive web client id description"
+  },
+  "driveSyncWebClientMissing": {
+    "message": "Web OAuth クライアントIDが未設定です。設定画面で入力してください。",
+    "description": "Drive sync web client missing"
+  },
+  "syncNow": {
+    "message": "今すぐ同期",
+    "description": "Drive sync now button"
+  },
+  "driveSyncSuccess": {
+    "message": "Drive 同期が完了しました",
+    "description": "Drive sync success message"
+  },
+  "driveSyncFailed": {
+    "message": "Drive 同期に失敗しました",
+    "description": "Drive sync failure message"
+  },
+  "driveSyncNotifyTitle": {
+    "message": "Stockpile",
+    "description": "Drive sync notification title"
+  },
+  "driveSyncNotifySuccess": {
+    "message": "Google Drive 同期が完了しました",
+    "description": "Drive sync notification success"
+  },
+  "driveSyncNotifyFailed": {
+    "message": "Google Drive 同期に失敗しました",
+    "description": "Drive sync notification failure"
+  },
+  "driveSyncAuthNotSupported": {
+    "message": "このブラウザでは Google OAuth の認可フローに対応していません。Chrome で試してください。",
+    "description": "Drive sync auth unsupported"
+  },
   "settingsTitle": {
     "message": "Stockpile 設定",
     "description": "Settings page title"

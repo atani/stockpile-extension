@@ -18,12 +18,22 @@ function i18n(key) {
   return chrome.i18n.getMessage(key) || key;
 }
 
+import { getPaidStatus, openPaymentPage } from '../lib/extpay.js';
+
 const SETTINGS_KEY = 'settings';
 const DB_KEY = 'downloadHistory';
 
 const DEFAULT_SETTINGS = {
   baseFolder: 'Stockpile',
   enabled: true,
+  pro: {
+    driveSyncEnabled: false,
+    driveSyncSettings: true,
+    driveSyncHistory: true,
+    driveSyncExports: true,
+    devOverride: false,
+    driveWebClientId: ''
+  },
   sites: {
     motionelements: {
       enabled: true,
@@ -48,6 +58,21 @@ const DEFAULT_SETTINGS = {
         'sfx': 'SE',
         'sound-effects': 'SE'
       }
+    },
+    artlist: {
+      enabled: true,
+      name: 'Artlist',
+      categoryMap: {}
+    },
+    epidemicsound: {
+      enabled: true,
+      name: 'Epidemic Sound',
+      categoryMap: {}
+    },
+    envato: {
+      enabled: true,
+      name: 'Envato',
+      categoryMap: {}
     }
   }
 };
@@ -58,6 +83,19 @@ const enableToggle = document.getElementById('enableToggle');
 const motionElementsEnabled = document.getElementById('motionElementsEnabled');
 const audiioEnabled = document.getElementById('audiioEnabled');
 const motionElementsMappings = document.getElementById('motionElementsMappings');
+const artlistEnabled = document.getElementById('artlistEnabled');
+const epidemicSoundEnabled = document.getElementById('epidemicSoundEnabled');
+const envatoEnabled = document.getElementById('envatoEnabled');
+const driveSyncEnabled = document.getElementById('driveSyncEnabled');
+const driveSyncSettings = document.getElementById('driveSyncSettings');
+const driveSyncHistory = document.getElementById('driveSyncHistory');
+const driveSyncExports = document.getElementById('driveSyncExports');
+const proDevOverride = document.getElementById('proDevOverride');
+const driveSyncStatus = document.getElementById('driveSyncStatus');
+const driveWebClientId = document.getElementById('driveWebClientId');
+const upgradeBtn = document.getElementById('upgradeBtn');
+const driveSyncNowBtn = document.getElementById('driveSyncNowBtn');
+const proStatusEl = document.getElementById('proStatus');
 const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
@@ -66,8 +104,11 @@ const clearDataBtn = document.getElementById('clearDataBtn');
 const downloadMacScript = document.getElementById('downloadMacScript');
 const downloadWinScript = document.getElementById('downloadWinScript');
 const statusEl = document.getElementById('status');
+const saveStatusEl = document.getElementById('saveStatus');
 
 let currentSettings = null;
+let isProUser = false;
+let isDevOverride = false;
 
 // Auto-extract scripts content
 const MAC_SCRIPT = `#!/bin/bash
@@ -199,6 +240,13 @@ async function loadSettings() {
     };
   }
 
+  if (result[SETTINGS_KEY]?.pro) {
+    currentSettings.pro = {
+      ...DEFAULT_SETTINGS.pro,
+      ...result[SETTINGS_KEY].pro
+    };
+  }
+
   return currentSettings;
 }
 
@@ -217,6 +265,15 @@ function populateForm(settings) {
   enableToggle.checked = settings.enabled !== false;
   motionElementsEnabled.checked = settings.sites?.motionelements?.enabled !== false;
   audiioEnabled.checked = settings.sites?.audiio?.enabled !== false;
+  artlistEnabled.checked = settings.sites?.artlist?.enabled !== false;
+  epidemicSoundEnabled.checked = settings.sites?.epidemicsound?.enabled !== false;
+  envatoEnabled.checked = settings.sites?.envato?.enabled !== false;
+  driveSyncEnabled.checked = settings.pro?.driveSyncEnabled === true;
+  driveSyncSettings.checked = settings.pro?.driveSyncSettings !== false;
+  driveSyncHistory.checked = settings.pro?.driveSyncHistory !== false;
+  driveSyncExports.checked = settings.pro?.driveSyncExports !== false;
+  proDevOverride.checked = settings.pro?.devOverride === true;
+  driveWebClientId.value = settings.pro?.driveWebClientId || '';
 
   // Render category mappings
   renderMappings(settings.sites?.motionelements?.categoryMap || {});
@@ -245,6 +302,7 @@ function collectFormData() {
   currentSettings.enabled = enableToggle.checked;
 
   if (!currentSettings.sites) currentSettings.sites = {};
+  if (!currentSettings.pro) currentSettings.pro = { ...DEFAULT_SETTINGS.pro };
 
   // MotionElements
   if (!currentSettings.sites.motionelements) {
@@ -269,7 +327,66 @@ function collectFormData() {
   }
   currentSettings.sites.audiio.enabled = audiioEnabled.checked;
 
+  // Pro sites
+  if (!currentSettings.sites.artlist) {
+    currentSettings.sites.artlist = { ...DEFAULT_SETTINGS.sites.artlist };
+  }
+  if (!currentSettings.sites.epidemicsound) {
+    currentSettings.sites.epidemicsound = { ...DEFAULT_SETTINGS.sites.epidemicsound };
+  }
+  if (!currentSettings.sites.envato) {
+    currentSettings.sites.envato = { ...DEFAULT_SETTINGS.sites.envato };
+  }
+
+  currentSettings.pro.devOverride = proDevOverride.checked;
+  currentSettings.pro.driveWebClientId = driveWebClientId.value.trim();
+
+  currentSettings.sites.artlist.enabled = artlistEnabled.checked;
+  currentSettings.sites.epidemicsound.enabled = epidemicSoundEnabled.checked;
+  currentSettings.sites.envato.enabled = envatoEnabled.checked;
+
+  if (isProUser || currentSettings.pro.devOverride) {
+    currentSettings.pro.driveSyncEnabled = driveSyncEnabled.checked;
+    currentSettings.pro.driveSyncSettings = driveSyncSettings.checked;
+    currentSettings.pro.driveSyncHistory = driveSyncHistory.checked;
+    currentSettings.pro.driveSyncExports = driveSyncExports.checked;
+  }
+
   return currentSettings;
+}
+
+function updateProUI(paid) {
+  isProUser = paid;
+  if (proStatusEl) {
+    proStatusEl.textContent = paid ? i18n('proStatusActive') : i18n('proStatusInactive');
+  }
+
+  document.querySelectorAll('[data-pro-input]').forEach((input) => {
+    input.disabled = !(paid || isDevOverride);
+  });
+
+  if (driveSyncNowBtn) {
+    driveSyncNowBtn.disabled = !(paid || isDevOverride);
+  }
+
+  if (upgradeBtn) {
+    upgradeBtn.style.display = paid ? 'none' : 'inline-block';
+  }
+}
+
+async function refreshProStatus() {
+  const result = await getPaidStatus();
+  const settings = await loadSettings();
+  isDevOverride = settings?.pro?.devOverride === true;
+  updateProUI(!!result.paid || isDevOverride);
+}
+
+function validateProSitePackSelections() {
+  if (!isProUser) {
+    artlistEnabled.checked = false;
+    epidemicSoundEnabled.checked = false;
+    envatoEnabled.checked = false;
+  }
 }
 
 /**
@@ -282,6 +399,39 @@ function showStatus(message, type = 'success') {
   setTimeout(() => {
     statusEl.className = 'status';
   }, 3000);
+}
+
+function showSaveStatus(message, type = 'success') {
+  if (!saveStatusEl) return;
+  saveStatusEl.textContent = message || '';
+  saveStatusEl.className = `save-status${type === 'error' ? ' error' : ''}`;
+  if (type === 'success') {
+    setTimeout(() => {
+      if (saveStatusEl.textContent === message) {
+        saveStatusEl.textContent = '';
+      }
+    }, 2500);
+  }
+}
+
+function showDriveSyncStatus(message, type = 'success') {
+  if (!driveSyncStatus) return;
+  driveSyncStatus.textContent = message || '';
+  driveSyncStatus.className = `pro-inline-status${type === 'error' ? ' error' : ''}`;
+
+  if (type === 'success') {
+    setTimeout(() => {
+      if (driveSyncStatus.textContent === message) {
+        driveSyncStatus.textContent = '';
+      }
+    }, 4000);
+  }
+}
+
+function sendMessage(message) {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage(message, (response) => resolve(response));
+  });
 }
 
 /**
@@ -377,6 +527,12 @@ saveBtn.addEventListener('click', async () => {
   collectFormData();
   await saveSettings();
   showStatus(i18n('settingsSaved'));
+  showSaveStatus(i18n('settingsSaved'));
+
+  sendMessage({
+    type: 'UPDATE_DRIVE_SYNC_SETTINGS',
+    data: currentSettings.pro || DEFAULT_SETTINGS.pro
+  });
 });
 
 exportBtn.addEventListener('click', exportData);
@@ -394,6 +550,31 @@ importFile.addEventListener('change', (e) => {
 });
 
 clearDataBtn.addEventListener('click', clearAllData);
+
+upgradeBtn.addEventListener('click', () => {
+  if (!openPaymentPage()) {
+    showStatus(i18n('upgradeFailed'), 'error');
+  }
+});
+
+driveSyncNowBtn.addEventListener('click', async () => {
+  showDriveSyncStatus('');
+  const response = await sendMessage({ type: 'DRIVE_SYNC_NOW' });
+  if (response?.success) {
+    showDriveSyncStatus(i18n('driveSyncSuccess'));
+  } else {
+    showDriveSyncStatus(response?.message || i18n('driveSyncFailed'), 'error');
+  }
+});
+
+proDevOverride.addEventListener('change', async () => {
+  isDevOverride = proDevOverride.checked;
+  updateProUI(isProUser || isDevOverride);
+  collectFormData();
+  await saveSettings();
+  showStatus(i18n('settingsSaved'));
+  showSaveStatus(i18n('settingsSaved'));
+});
 
 // Script download handlers
 downloadMacScript.addEventListener('click', () => {
@@ -425,4 +606,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   applyI18n();
   await loadSettings();
   populateForm(currentSettings);
+  await refreshProStatus();
+  validateProSitePackSelections();
 });
